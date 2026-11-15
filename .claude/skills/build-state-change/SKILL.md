@@ -1,0 +1,500 @@
+---
+name: build-state-change
+description: Implements a write slice (a command validated against replayed events, new events emitted) in Elixir with the FACT event store, from a slice.json
+---
+
+# Build a write slice
+
+> Before anything else, read the definition at
+> `.build-kit/.slices/{Context}/{slice}/slice.json`. That file is the **source of
+> truth** for every field, event and piece of metadata. Never invent fields that
+> aren't there.
+
+> And read `.build-kit/CLAUDE.md`. It carries three rules `slice.json` doesn't
+> state, and all three show up below — without them the code compiles and is
+> wrong.
+
+---
+
+## What a write slice is
+
+A command that decides, against history, whether to emit events. In this stack:
+
+```
+Context.function(...)  →  Decide.execute(db, Core, cmd)
+                              1. Reader.read(db, Core.query(cmd))     → events
+                              2. Enum.reduce(…, Core.apply_event/2)   → state
+                              3. Core.execute(cmd, state)             → {:ok, [ev]} | {:error, m}
+                              4. Library.Event.to_event/1               → maps
+                              5. Fact.append(db, …, {append_condition, pos})
+                              6. wait until the write is visible
+```
+
+`Core` is **pure**. `Decide` owns the side effects. `Context` is the only public
+API.
+
+---
+
+## Step 1 — Read the `slice.json`
+
+Pull out:
+
+- **`title`** — the slice name. Names the folder, in `snake_case`.
+- **`context`** — the bounded context.
+- **`commands[]`** with their `fields[]`: `name`, `type`, `cardinality`,
+  `idAttribute`, `generated`, `optional`, `mapping`.
+- **`events[]`** — same, plus `dependencies` so you know who consumes them.
+- **`specifications[]`** — the given/when/then scenarios **with example data**.
+  They are the tests, almost literally.
+- **Each element's `description`** — it carries the invariants written out in
+  prose. It is the source of the business rules; read all of it.
+
+> **Comments**: every element carries `comments: string[]`. Use them as hints.
+> If a comment raises an **open decision** rather than a hint — "rate limiting
+> still undecided", "own stream or the main registry?" — don't decide it
+> yourself: invoke `request-feedback`. Resolve the ones you consume:
+> `POST <BASE_URL>/api/org/<ORG_ID>/boards/<BOARD_ID>/nodes/<nodeId>/comments/<commentId>/resolve`.
+
+---
+
+## Step 2 — The command
+
+**File:** `lib/library/slices/<slice>/<slice>.ex`
+
+```elixir
+defmodule Library.Slices.<Slice>.<Slice> do
+  use Library.Command
+
+  embedded_schema do
+    field :<entity>_id, :string
+    field :field_a, :string
+    field :field_b, :integer
+  end
+end
+```
+
+That's the whole file. `use Library.Command` (`lib/library/command.ex`) gives it
+`new/2` and `changeset/2`: **every field is required** unless named in
+`optional:` — `use Library.Command, optional: [:field_b]` for the fields with
+`optional: true` on the board.
+
+**The fields are the ones in `commands[].fields[]` in `snake_case`**, plus the
+generated ones from step 3. Types:
+
+| `slice.json` | `field` |
+|---|---|
+| `type: "String"` / `"UUID"` | `:string` |
+| `type: "Int"` | `:integer` |
+| `type: "Double"` / `"Decimal"` | `:float` / `:decimal` |
+| `type: "Boolean"` | `:boolean` |
+| `type: "Date"` | `:date` |
+| `type: "DateTime"` | `:string` (ISO 8601, as the events carry it) |
+| `type: "Custom"` | `:map` |
+| `cardinality: "List"` | `{:array, <type>}` |
+| `optional: true` | in `optional:` |
+
+A closed list or a format **stated in the field's `description`** goes in an
+override of `changeset/2` that calls `super/2` and adds `validate_inclusion/3`
+or `validate_format/3`. Nothing else: no shape rule the schema or the
+description doesn't state, and never in `core.ex`.
+
+**No messages in the command.** A missing field comes back as an error key
+(`validation: :required`); the screen turns it into words.
+
+---
+
+## Step 3 — Generated fields (a rule `slice.json` doesn't state)
+
+`slice.json` marks fields `generated: true` or
+`mapping: "derived:append instant"`. **Don't generate them in `Core`.**
+
+`Core` is pure: a `DateTime.utc_now()` or an `Ecto.UUID.generate()` inside `execute/2` makes
+the decision impossible to test without a clock and without seeding randomness.
+
+> **Identifiers and timestamps are generated in `context.ex` and travel on the
+> command struct**, even though `slice.json` doesn't list them among the
+> command's fields.
+
+This is the **only** authorised deviation from "if it isn't in `slice.json`, it
+isn't in the code".
+
+- Identifiers → `Ecto.UUID.generate()`
+- Timestamps → `DateTime.utc_now() |> DateTime.to_iso8601()`
+
+---
+
+## Step 4 — The event struct and its tags
+
+**File:** `lib/library/slices/<slice>/<event>.ex`, in `snake_case`.
+
+```elixir
+defmodule Library.Slices.<Slice>.<Event> do
+  @derive {Library.Event,
+           type: "<Event>",
+           tags: [:<entity>_id, :<other>_id, <sub>: [:<field>, "<subId>"]]}
+  defstruct [:<entity>_id, :<other>_id, :<field>, :field_a]
+end
+```
+
+That's the whole file: the struct with every field in `events[].fields[]`, in
+`snake_case`, and its declaration. `Library.Event` (`lib/library/event.ex`)
+builds `%{type:, data:, tags:}` from it. `defstruct`, not a schema: nothing
+casts an event, and other slices read it as a raw map.
+
+### The tags (a rule `slice.json` doesn't state)
+
+`slice.json` ships `tags: []` on every element. **They aren't empty, they're
+underived.**
+
+> Every event field — or subfield — with `idAttribute: true` or `tag: true`
+> produces a tag `<name without the Id suffix, in snake_case>:<value>`. A tag
+> that doesn't come from the board is invented.
+
+**The event carries all of them; a query picks one.** An event says everything
+it is about — `ComprobacionSolicitada` writes both `comprobacion:` and
+`sesion:` — while a query names the single tag that scopes it: the write side
+picks the one that is its consistency boundary, and each read model picks the
+one its view is about. That's how two views fold the same events and answer
+different questions.
+
+The consequence worth remembering: **a query can only scope by a tag its events
+actually carry.** Scope by one nothing writes and the query finds nothing, in
+silence.
+
+`checkId` → `:check_id` → `"check:<value>"`. A subfield goes by its path:
+`regionId` inside `address` → `region: [:address, "regionId"]`. A tag with no
+value in a given event is left out.
+
+**This matters more than anything else in this skill.** Tags are the query keys
+of the whole system: `query/1`, the read models and the TODO queues all ask by
+them. A made-up tag doesn't fail — it silently stops finding events downstream.
+
+If an event has no `idAttribute: true` and no `tag: true` at all, **stop and invoke
+`request-feedback`**: an event with no tags can't be queried.
+
+> **When the rule runs out**, read `references/finding-tags.md`. It carries the
+> question to put to the modeller, and the case a single id can't express — a
+> decision that needs two histories at once, which DCB handles in one append
+> where aggregate modelling would need a saga.
+
+### The event type
+
+`type:` is the event's `title` **verbatim**, PascalCase, no spaces. It's what the
+store keeps and the string other slices' `apply_event/2` match on, so it is
+declared, never derived from the module name: renaming a module must not rename
+a fact.
+
+`test/library/event_spec_test.exs` checks every event's `type:` and `tags:`
+against `slice.json`.
+
+---
+
+## Step 5 — `core.ex`
+
+**File:** `lib/library/slices/<slice>/core.ex`
+
+```elixir
+defmodule Library.Slices.<Slice>.Core do
+  use Library.StateChange
+
+  alias Library.Slices.<Slice>.{<Command>, <Event>}
+
+  @impl true
+  def query(%<Command>{} = cmd) do
+    Fact.QueryItem.types(["<Event>"])
+    |> Fact.QueryItem.tags(["<entity>:#{cmd.<entity>_id}"])
+  end
+
+  @impl true
+  def initial_state, do: %{already_happened: false}
+
+  @impl true
+  def apply_event(state, %{"event_type" => "<Event>"}), do: %{state | already_happened: true}
+  def apply_event(state, _), do: state
+
+  @impl true
+  def execute(_cmd, %{already_happened: true}), do: {:ok, []}
+
+  def execute(%<Command>{} = cmd, _state) do
+    {:ok, [%<Event>{...}]}
+  end
+end
+```
+
+### What to read in `query/1`
+
+**Only what the decision needs.** Not "every event for this entity": the minimum
+set that answers the question `execute/2` asks.
+
+If the only invariant is idempotency, `query/1` is the event type itself scoped
+by its identifier — with a freshly generated id it folds nothing, and at the same
+time it guards against a retry with the same id.
+
+If the decision needs events it can only name after reading others — the
+plots of a lot's receptions, which aren't tagged with the lot — add
+`next_query(state)`: it returns the follow-up queries the folded state implies,
+and `Decide` reads the new ones, folds again and stops when none are new. The
+command keeps the board's fields; `context.ex` never pre-reads to fill one in.
+Every follow-up query joins the append condition.
+
+`append_condition/1` falls back to `query/1`, which is the safe default. Override
+it only when concurrent events **cannot** invalidate the decision.
+
+### Only domain rules here (a rule `slice.json` doesn't state)
+
+`execute/2` holds the rules the board's `SPEC_ERROR` scenarios state — business
+rules, with or without history. Shape (presence, type, format, closed lists)
+was checked by the command's changeset before `Decide` read anything; see rule 3
+of `.build-kit/CLAUDE.md`.
+
+Error reasons are **domain atoms** (`:geometry_outside_country`,
+`:plot_already_assigned`), not strings: the screen translates them.
+
+**Exactly the board's, nothing defensive:**
+
+- One error atom per `SPEC_ERROR`, with the board's code. No extra atom for a
+  case another rule already covers (an unknown type is also "not a type this
+  slice accepts").
+- No fallbacks for values the command or an earlier rule guarantees
+  (`x || %{}`, `x || "LOW"`). If it can't be nil, don't handle nil.
+- An event field whose `mapping` is a command field copies the command field.
+  Don't re-derive it.
+- No public list of rejection reasons, no optional arguments nobody passes.
+
+### `core.ex` is the contract and nothing else
+
+`core.ex` defines `query/1`, `initial_state/0`, `apply_event/2`, `execute/2`
+and, when needed, `next_query/1` and an overridden `append_condition/1`. **No other `def` or `defp`.**
+Whoever opens the file reads the decision top to bottom: what it reads, how it
+folds, which rules refuse, what it records.
+
+- The rules are inline in `execute/2`: a `cond` that names the rejection, then
+  the event built in place.
+- Nothing from another slice: no `Core`, no `Context`, no fold shared with
+  other slices. A catalogue several slices need can be a declared domain
+  module (`.build-kit/CLAUDE.md`), pure and folding no events.
+- `test/library/core_contract_test.exs` fails on any other function in a
+  `core.ex`.
+
+### Thresholds get justified
+
+If you need a constant `slice.json` doesn't give you, write in a comment **where
+it comes from and in what units**. An unjustified threshold is an invented
+business rule.
+
+---
+
+## Step 6 — `context.ex`
+
+**File:** `lib/library/slices/<slice>/context.ex`
+
+```elixir
+defmodule Library.Slices.<Slice>.Context do
+  alias Library.Slices.<Slice>.{<Command>, Core}
+
+  require Logger
+
+  def <verb>(params) do
+    with {:ok, cmd} <-
+           <Command>.new(params, %{
+             <entity>_id: Ecto.UUID.generate(),
+             <timestamp>: DateTime.utc_now() |> DateTime.to_iso8601()
+           }),
+         {:ok, _events} <- write(cmd) do
+      {:ok, cmd.<entity>_id}
+    end
+  end
+
+  defp write(cmd) do
+    Library.Decide.execute(Library.Application.fact_db(), Core, cmd)
+  rescue
+    e in RuntimeError ->
+      Logger.error("could not write: #{Exception.message(e)}")
+      {:error, :store_unavailable}
+  end
+end
+```
+
+**`params` go straight into `new/2`.** `cast/3` already keeps only the
+schema's fields and treats `""` and `"   "` as missing, so no `params/1` that
+re-picks fields and no `clean/1` that trims. The generated values go inline as
+the second argument. No `change/1` wrapper either: the form validates against
+`<Command>.changeset/1` itself.
+
+Shape first: an ill-formed command never reads the store. And `write/1`
+rescues because `Application.fact_db/0` **raises** if the store isn't up, and
+this gets called from LiveView handlers: an exception there kills the visitor's
+session and takes with it whatever they had just entered.
+
+Return `{:ok, <identifier>}`, not `{:ok, events}`: the identifier is what the
+layer above needs to subscribe to the result and to show the reference.
+
+The two ways it says no, and what the user sees:
+
+- `{:error, %Ecto.Changeset{}}` — the shape is wrong. The form renders it with
+  `to_form/1`, under each field; the words come from `translate_error/1`
+  (Gettext), never from the command.
+- `{:error, atom}` — a domain rule refused it (a board `SPEC_ERROR`). The screen
+  translates the atom.
+
+A processor builds commands from facts, so a changeset error there is a bug,
+not an answer: log it and let the task fail.
+
+---
+
+### The one seam the view is allowed to reach through
+
+`context.ex` is the slice's public surface, and a LiveView or controller should
+go through it. There is exactly one exception worth allowing, and it needs
+stating because otherwise it gets copied without its conditions:
+
+> A view may call a **pure predicate on `Core`** to answer "would this command
+> be accepted?" without sending it.
+
+For **shape**, the view doesn't need this seam: it validates against
+`<Command>.changeset/1` on `phx-change`, the usual Phoenix way. The seam is for a
+**domain** check that needs no history.
+
+The case that earns it: a form or a map that has to enable or disable its submit
+button as the user types. Going through `Context` means a round trip and a
+written event for something the user hasn't committed to yet. Calling
+`Core.valid_<thing>?/1` costs nothing and stays honest, because `Core` is pure —
+no store, no clock, no identifiers.
+
+**Three conditions, all of them:**
+
+- The function is **pure** — the same purity `Core` has everywhere else. The
+  moment a `Core` function touches the store or the clock, this stops being
+  safe and the view has to go through `Context`.
+- It **answers, it doesn't act.** A predicate or a `:ok | {:error, reason}`. If
+  the view wants something to happen, that's `Context`.
+- The **same check still runs inside `execute/2`.** This is a convenience for
+  the interface, never the enforcement. Validation that only lives in the view
+  is validation an API call walks straight past.
+
+Everything else — writing, reading a projection, generating an id or an
+instant — goes through `Context`. And the direction never reverses: nothing
+under `lib/<app>/` may name a module from `lib/<app>_web/`. The one legitimate
+exception is `application.ex`, which starts the Endpoint because it is the
+composition root and knows about everything it supervises.
+
+## Step 7 — `core_test.exs`
+
+**File:** `test/library/slices/<slice>/core_test.exs`
+
+**One `describe` per specification in `slice.json`, with its literal title, and
+nothing else.** No test outside a `describe`: not the command's shape, not the
+tags, not an extra case the board doesn't have. If a case matters, it goes on
+the board first. `scenario_tests_test.exs` checks the titles against
+`slice.json`.
+
+```elixir
+defmodule Library.Slices.<Slice>.CoreTest do
+  use ExUnit.Case, async: true
+
+  import Library.Scenario
+
+  alias Library.Slices.<Slice>.{<Command>, <Event>, Core}
+  alias Library.Slices.<OtherSlice>.<GivenEvent>
+
+  describe "<the specification's literal title>" do
+    test "<what it pins down>" do
+      given([%<GivenEvent>{<entity>_id: "<example>", field: "<example>"}])
+      |> decide(Core, %<Command>{<entity>_id: "<example>", field: "<example>"})
+      |> expect({:ok, [%<Event>{<entity>_id: "<example>", field: "<example>"}]})
+    end
+  end
+
+  describe "<a SPEC_ERROR specification's literal title>" do
+    test "<what it pins down>" do
+      given([])
+      |> decide(Core, %<Command>{<entity>_id: "<example>"})
+      |> expect({:error, :<reason>})
+    end
+  end
+end
+```
+
+**`given`, `decide`, `expect` — and nothing else.** No helper functions in the
+test (`cmd()`, `given_event()`, a private fold): each scenario reads like the
+board's, with the command and every event written out. Module attributes for an
+id repeated across scenarios are fine.
+
+Why the scenario goes through `Library.Scenario` instead of folding the `given` by
+hand: in production the decision only sees what `query/1` reads. `decide/3`
+stores the `given` the way `Library.Decide` appends — through
+`Library.Event.to_event/1`, so with the production tags — and runs the production
+read-and-fold loop over it, `query/1` and `next_query/1` included. A query that
+forgets a type, asks for the wrong tag or misses a follow-up fails the scenario
+that needs it, and the failure lists the `given` events nothing read.
+
+Rules:
+
+- **The `Core` through `Library.Scenario` only.** No store, no `Context`, no
+  `ConnCase`, and never `Core.execute/2` on a hand-folded state.
+- **The data comes from `specifications[].given/when/then[].fields[].example`**,
+  literally. Don't invent values: the board's are usually measured.
+- **The `given` events are the event structs** of the slices that write them.
+  A test may alias them; only `lib/` is held to slice isolation. An event with
+  no struct in the app — still in the store but written by nothing any more,
+  or from outside — goes in as the shape FACT appends:
+  `%{type: "<Event>", data: %{...}, tags: ["<entity>:<id>"]}`, with `id:` when
+  the fold keys on the event id.
+- `expect/2` takes a pattern: a struct or map names only the keys the scenario
+  pins down; a list must have exactly the elements the scenario has.
+- A `SPEC_ERROR` scenario is a domain rule: `|> expect({:error, :<reason>})`.
+- The tags are pinned down by `event_spec_test.exs` against the board; no
+  per-slice test of `Library.Event.to_event/1` is needed.
+- **Never compare `Map.keys/1` against a list** — the order isn't guaranteed and
+  the assertion fails intermittently. Use `MapSet`.
+- **A fixture must never invent the shape of its own input.** Board examples are
+  the input here, so following the rule above already satisfies this. But the
+  moment a test feeds something that exists outside the repo — a data file, an
+  API response, a deployed artefact — the fixture has to be derived from it and
+  guarded against drift, or the test only proves the code agrees with itself.
+  `/build-automation`, step 2, has the guard.
+
+### If a test fails, suspect the test
+
+The board's examples are usually measured against real systems. Before changing
+the code, check the assertion says what the scenario says.
+
+---
+
+## Step 8 — Quality gate
+
+```
+mix precommit                          # --warnings-as-errors, format, tests
+mix test test/library/slices/<slice>/   # this slice only
+```
+
+Never commit with warnings.
+
+---
+
+## Final check against `slice.json`
+
+- [ ] Every field in `commands[].fields[]` is in the command's `embedded_schema`.
+- [ ] The command is `use Library.Command` + `embedded_schema`; only the
+      `optional: true` fields in `optional:`; no shape rule the schema or the
+      description doesn't state; no messages.
+- [ ] `context.ex` builds the command with `new/2` before calling `Decide`.
+- [ ] Every field in `events[].fields[]` is in the event struct.
+- [ ] No invented fields — except the generated ones from step 3.
+- [ ] No `@moduledoc`, no `@doc`, no comment restating the board (`.build-kit/CLAUDE.md`, "No prose in slices").
+- [ ] The event is `@derive {Library.Event, type:, tags:}` + `defstruct`; `type:`
+      is the board's title; every `idAttribute: true` / `tag: true` field or
+      subfield is in `tags:`, and nothing else.
+- [ ] Every `specifications[]` has its `describe` in the test.
+- [ ] `Core` has no side effects: no `utc_now`, no `Ecto.UUID`, no `Req`, no `Fact`.
+- [ ] `Core` holds no shape checks: only the board's domain rules, one atom
+      per `SPEC_ERROR`, no defensive fallbacks.
+- [ ] `core.ex` defines only the contract's functions: no helpers.
+- [ ] `context.ex` passes `params` straight to `new/2`: no field re-picking, no
+      cleaning, generated values inline.
+- [ ] `apply_event/2` has a final clause ignoring what isn't its own.
+- [ ] If the slice has `screens`, you have **not** written an interface: you have
+      written the **screen brief** at `docs/screens/<slice>.md`, as
+      `.build-kit/CLAUDE.md` requires, and noted it in `progress.txt`. Include
+      the **error atoms** `Core` returns: the screen translates them and can't
+      guess them.

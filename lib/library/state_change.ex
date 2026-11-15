@@ -1,0 +1,43 @@
+defmodule Library.StateChange do
+  @moduledoc """
+  Behaviour for write slices (the Decider pattern with DCB).
+
+  Pick from history, fold into current state, execute the command → new events
+  or a rejection.
+
+  ## DCB append conditions
+
+  `query/1` defines which events to read (SourcingCriteria).
+  `append_condition/1` defines which concurrent events would invalidate the
+  decision (AppendCriteria).
+
+  `next_query/1` (optional) is what else to read, given what's folded so far:
+  the plots of a lot's receptions can't be named before the lot is read.
+  `Library.Decide` reads only the new ones and stops when none are new; every
+  follow-up query joins the append condition.
+
+  By default `append_condition/1` falls back to `query/1` — symmetric, which is
+  the safe value. Override it when concurrent events can only strengthen your
+  invariant and shouldn't cause a conflict (the asymmetric DCB pattern).
+  """
+
+  @callback query(command :: term()) :: term()
+  @callback next_query(state :: term()) :: term() | nil
+  @callback append_condition(command :: term()) :: term()
+  @callback initial_state() :: term()
+  @callback apply_event(state :: term(), event :: map()) :: term()
+  @callback execute(command :: term(), state :: term()) :: {:ok, [term()]} | {:error, term()}
+
+  @optional_callbacks next_query: 1
+
+  defmacro __using__(_opts) do
+    quote do
+      @behaviour Library.StateChange
+
+      @doc false
+      def append_condition(cmd), do: query(cmd)
+
+      defoverridable append_condition: 1
+    end
+  end
+end
