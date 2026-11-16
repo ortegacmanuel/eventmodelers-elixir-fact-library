@@ -43,3 +43,31 @@ Learnings:
   - core.ex allows no helper functions. Use Map.replace_lazy/3 to update an entry only if it exists.
   - In tests, events whose slice isn't built yet go into `given` as %{type:, data: (snake_case), tags:}.
 ---
+
+## 2026-11-16T00:00:00Z — Task c2888b2c-9de9-4b19-b220-e4d051bbdaee
+
+Slice: Catalogue (b76e3cd6-020b-47b0-a4ea-01ba76574928)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. The payload had sliceTitle null; the id resolves to Catalogue in the local index (.build-kit/.slices/lending-library/catalogue/slice.json, status Done).
+- Already built and committed as a527f17 "feat: Catalogue" (state view folding BookAdded, BookTitleCorrected, BookLent and BookReturned; Context.catalogue/0; 4 scenarios; screen brief docs/screens/catalogue.md), status recorded in 2edb3a1.
+
+Learnings:
+- Payloads can arrive with sliceTitle null; resolve the title by grepping the sliceId under .build-kit/.slices/ (index.json / slice.json).
+---
+- 2026-11-16T10:33:59+01:00 Correct book title: slice already InProgress (claimed by loop); branch feature/correctbooktitle; slice.json full, no comments, no backendPrompt.
+- Built CorrectBookTitle via /build-state-change (command, BookTitleCorrected tag book:, Core rejects :book_not_found, Context.correct_book_title/1, 2 scenarios).
+
+## 2026-11-16 - Correct book title
+
+- Slice was already InProgress (claimed by the loop), branch feature/correctbooktitle. slice.json full; no comments, no backendPrompt.
+- Built via /build-state-change: CorrectBookTitle command (book_id, title; nothing generated), BookTitleCorrected event (tag book:), Core reads BookAdded by book tag and rejects :book_not_found, Context.correct_book_title/1.
+- 2 scenarios ("The title of an added book is corrected", "A book that was never added can't be corrected"). mix precommit green (20 tests); slice tests green.
+- Screen brief docs/screens/correct-book-title.md (mockup on board node dcee0f7c).
+- Files: lib/library/slices/correct_book_title/*, test/library/slices/correct_book_title/core_test.exs, docs/screens/correct-book-title.md
+- No test-analyzer skill in this kit; skipped.
+- **Learnings for future iterations:**
+  - An "entity must exist" rule: query the creating event (BookAdded) by the entity tag, fold to %{added: bool}, execute rejects on false. No idempotency needed when the id is user-supplied.
+  - Command with no generated fields: Context calls <Command>.new(params) (new/2 defaults generated to %{}).
+---
