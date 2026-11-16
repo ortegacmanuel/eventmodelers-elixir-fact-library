@@ -194,3 +194,32 @@ Learnings:
   - The "assumed queue" comment in send_reminder/processor.ex is now stale; it lives in another slice, so it was left alone.
 ---
 - 2026-11-16T10:45:03+01:00 Overdue loans to remind: committed d7e73c7, FF-merged to main, status Done on board and in index.json; learning recorded.
+
+## 2026-11-16T09:45:24Z — Task e1fcefab-65b8-4e49-97bf-65871bfd3586
+
+Slice: Overdue loans to remind (6412eba1-648e-4814-b9f4-45e9a42a0474)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; id resolves to "Overdue loans to remind" via .build-kit/.slices/lending-library/overdueloanstoremind/slice.json.
+- Already built and committed as d7e73c7 "feat: Overdue loans to remind" (STATE_VIEW TODO queue for Send reminder: BookLent/BookReturned/ReminderSent by type, due_on < today; 3 scenarios green), followed by 40a6afe "chore: Overdue loans to remind done".
+- Task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event echoes our own status update after a build.
+---
+- 2026-11-16T10:45:47+01:00 Return book: slice already InProgress (claimed by loop); branch feature/returnbook; slice.json full (STATE_CHANGE), no comments, no backendPrompt.
+- 2026-11-16T10:46:24+01:00 Return book: built via /build-state-change (ReturnBook cmd, BookReturned tags loan:/book:/member:, Core rejects :book_not_lent); 3 scenarios green; screen brief docs/screens/return-book.md (mockup node c150cd06). Running mix precommit.
+
+## 2026-11-16 - Return book
+
+- Slice was already InProgress (claimed by the loop), branch feature/returnbook. slice.json full (STATE_CHANGE); no comments, no backendPrompt.
+- Built via /build-state-change: ReturnBook command (book_id; returned_at generated in Context), BookReturned event (tags loan:, book:, member:), Core reads BookLent/BookReturned by book:<id>, folds the open loan; rejects :book_not_lent (both "not lent" and "already returned" scenarios share the board's code). Event takes loan_id/member_id from the folded loan. Context.return_book/1 -> {:ok, loan_id}.
+- 3 scenarios as describes; mix precommit green (38 tests); slice tests green.
+- Screen brief docs/screens/return-book.md (mockup on board node c150cd06).
+- No test-analyzer skill in this kit; skipped.
+- Files: lib/library/slices/return_book/*, test/library/slices/return_book/core_test.exs, docs/screens/return-book.md
+- **Learnings for future iterations:**
+  - A command that names only one id (book) but whose event needs others (loan, member): fold them from the history in Core and copy them into the event; the command stays the board's fields.
+  - Two SPEC_ERROR scenarios with the same board code are one atom and one execute clause.
+---
