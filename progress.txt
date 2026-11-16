@@ -224,3 +224,17 @@ Learnings:
   - Two SPEC_ERROR scenarios with the same board code are one atom and one execute clause.
 ---
 - 2026-11-16T10:46:51+01:00 Return book: committed c1051f8, FF-merged to main, status Done on board and in index.json; learning recorded.
+
+## 2026-11-16T09:47:17Z — Task 1af64f26-7782-4597-9ce5-65a956fa84cf
+
+Slice: Return book (97362752-b03f-4849-8281-6cb414559284)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; id resolves to "Return book" via .build-kit/.slices/lending-library/returnbook/slice.json.
+- Already built and committed as c1051f8 "feat: Return book" (STATE_CHANGE: ReturnBook -> BookReturned, rejects :book_not_lent; 3 scenarios green), followed by f7cc8c7 "chore: Return book done".
+- Task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event echoes our own status update after a build.
+---
