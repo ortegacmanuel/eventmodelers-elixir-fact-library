@@ -163,3 +163,4 @@ Learnings:
   - Slice folder = title NFD-stripped, downcased, non-alnum -> "_" ("Member's loans" -> member_s_loans). scenario_tests_test.exs SILENTLY skips a test dir with any other name.
   - A view scoped by one tag that needs data from events carrying only another tag: use next_query/1 over the folded ids.
 ---
+- 2026-11-16T10:43:18+01:00 Member's loans: committed d59db90, FF-merged to main, status Done on board and in index.json; learnings recorded.
