@@ -28,3 +28,18 @@ Learnings:
 - A Done event can arrive for a slice this loop has just finished; it is the echo of our own status update, so just log it.
 - .build-kit/tasks.json may not exist when a task is handed over directly in the prompt; process the given task anyway.
 ---
+
+## 2026-11-16 - Catalogue
+
+- Slice was already InProgress (claimed by the loop), branch feature/catalogue. The local stub slices were refreshed with `npx @eventmodelers/cli fetch --context "Lending library"`. The slug `lending-library` is rejected, so use the display name. No comments and no backendPrompt.
+- Built via /build-state-view: Core folds BookAdded, BookTitleCorrected, BookLent and BookReturned into a list ordered by when each book was added, with `available` true/false. Context.catalogue/0.
+- 4 scenarios as describes; mix precommit green (18 tests); slice tests green.
+- Screen brief docs/screens/catalogue.md (mockup on board node 67206f8c).
+- Files: lib/library/slices/catalogue/{core,context}.ex, test/library/slices/catalogue/core_test.exs, docs/screens/catalogue.md
+- No test-analyzer skill in this kit; skipped.
+- **Learnings for future iterations:**
+  - BookLent/BookReturned tags: loan:, book:, member:. BookTitleCorrected tags: book:. All event fields ending in Id are idAttribute.
+  - A whole-collection view, like the catalogue, queries by types only, with no tag.
+  - core.ex allows no helper functions. Use Map.replace_lazy/3 to update an entry only if it exists.
+  - In tests, events whose slice isn't built yet go into `given` as %{type:, data: (snake_case), tags:}.
+---
