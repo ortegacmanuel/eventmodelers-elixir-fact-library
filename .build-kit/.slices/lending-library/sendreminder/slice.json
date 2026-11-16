@@ -1,0 +1,553 @@
+{
+  "id": "fff86c00-5efc-4607-b951-1819ed238455",
+  "title": "Send reminder",
+  "status": "Done",
+  "sliceType": "AUTOMATION",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [
+    {
+      "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+      "title": "SendReminder",
+      "type": "COMMAND",
+      "fields": [
+        {
+          "name": "loanId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "sentAt",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": true,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "DateTime",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "5381dcda-d301-4e6a-a26d-b49d4216081c",
+          "type": "INBOUND",
+          "title": "Reminder sender",
+          "elementType": "AUTOMATION"
+        },
+        {
+          "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+          "type": "OUTBOUND",
+          "title": "ReminderSent",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Send reminder",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "7abb8f54-4994-4be9-8634-f7f493db241a",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "events": [
+    {
+      "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+      "title": "ReminderSent",
+      "type": "EVENT",
+      "fields": [
+        {
+          "name": "loanId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "sentAt",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "DateTime",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+          "type": "INBOUND",
+          "title": "SendReminder",
+          "elementType": "COMMAND"
+        },
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "type": "OUTBOUND",
+          "title": "Overdue loans to remind",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Library",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Send reminder",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "readmodels": [],
+  "screens": [],
+  "processors": [
+    {
+      "id": "5381dcda-d301-4e6a-a26d-b49d4216081c",
+      "title": "Reminder sender",
+      "type": "AUTOMATION",
+      "fields": [],
+      "dependencies": [
+        {
+          "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+          "type": "OUTBOUND",
+          "title": "SendReminder",
+          "elementType": "COMMAND"
+        },
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "type": "INBOUND",
+          "title": "Overdue loans to remind",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Send reminder",
+      "description": "Every minute, takes each loan from \"Overdue loans to remind\", sends the member a reminder, then records it with SendReminder. The external system is a fake mailer: it only writes one log line per reminder (Logger.info \"Reminder sent: member M-1042, book <bookId>, loan <loanId>\"), so the example runs without credentials. If the mailer fails, nothing is recorded and the loan stays in the queue for the next poll.",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "5381dcda-d301-4e6a-a26d-b49d4216081c",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "0bf5bb7d-2f16-4773-b8f9-259ffaf7a8a0",
+      "title": "An overdue loan gets its reminder",
+      "chapter": "Lending library",
+      "sliceName": "Send reminder",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+          "title": "SendReminder",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:00Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+          "title": "ReminderSent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b97de38b-ff58-4afc-a352-eecc36169dd8",
+      "title": "A loan gets only one reminder",
+      "chapter": "Lending library",
+      "sliceName": "Send reminder",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ]
+        },
+        {
+          "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+          "title": "ReminderSent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+          "title": "SendReminder",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:05Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "7e6c4b28-ee45-4539-88eb-1d20582396b5",
+          "title": "A loan gets only one reminder",
+          "description": "already_reminded",
+          "type": "SPEC_ERROR",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "8f87f49d-f2eb-47f7-aa77-6f859423c79d",
+      "title": "A loan returned before the reminder gets none",
+      "chapter": "Lending library",
+      "sliceName": "Send reminder",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ]
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-19T07:55:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "7abb8f54-4994-4be9-8634-f7f493db241a",
+          "title": "SendReminder",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:00Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "85de415b-be18-4a3a-aa49-09f49ba1da93",
+          "title": "A loan returned before the reminder gets none",
+          "description": "loan_closed",
+          "type": "SPEC_ERROR",
+          "fields": []
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

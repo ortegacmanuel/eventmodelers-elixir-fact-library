@@ -37,9 +37,12 @@ npm-debug.log
 
 # .build-kit/ is mostly the loop the CLI installs (its JS and node_modules):
 # version only the blueprint, the learnings and the prompts, which are yours.
+# This example also versions the model it was built from (`fetch --context`),
+# so the scenario guard has something to check in a fresh clone.
 .build-kit/*
 !.build-kit/CLAUDE.md
 !.build-kit/AGENTS.md
+!.build-kit/.slices/
 !.build-kit/lib/
 .build-kit/lib/*
 !.build-kit/lib/*.md
@@ -52,3 +55,14 @@ npm-debug.log
 
 # eventmodelers credentials (token): never version controlled
 .eventmodelers/
+
+# Installed by `npx @eventmodelers/cli init`, under the CLI's own licence
+# (CC BY-NC 4.0): not part of this repo. The build-* skills are the kit's.
+/CLAUDE.md
+/.claude/skills/comic/
+/.claude/skills/connect/
+/.claude/skills/learn-eventmodelers-api/
+/.claude/skills/load-slice/
+/.claude/skills/request-feedback/
+/.claude/skills/ui-contract/
+/.claude/skills/update-slice-status/

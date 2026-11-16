@@ -1,0 +1,309 @@
+{
+  "id": "b1bc3e9b-e6c1-482e-9ce8-a8ac71c55010",
+  "title": "Add book",
+  "status": "Done",
+  "sliceType": "STATE_CHANGE",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [
+    {
+      "id": "551b642a-a5bb-490d-881d-5bfbd19f187b",
+      "title": "AddBook",
+      "type": "COMMAND",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": true,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "author",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "dcdf69a5-0129-433f-9d22-adeb4810a108",
+          "type": "INBOUND",
+          "title": "Add a book",
+          "elementType": "HTML_SCREEN"
+        },
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "type": "OUTBOUND",
+          "title": "BookAdded",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Add book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "551b642a-a5bb-490d-881d-5bfbd19f187b",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "events": [
+    {
+      "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+      "title": "BookAdded",
+      "type": "EVENT",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "author",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "551b642a-a5bb-490d-881d-5bfbd19f187b",
+          "type": "INBOUND",
+          "title": "AddBook",
+          "elementType": "COMMAND"
+        },
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "type": "OUTBOUND",
+          "title": "Catalogue",
+          "elementType": "READMODEL"
+        },
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "type": "OUTBOUND",
+          "title": "Member's loans",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Library",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Add book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "4a687943-0531-43db-bf04-a4b18e5143b8",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "readmodels": [],
+  "screens": [
+    {
+      "id": "dcdf69a5-0129-433f-9d22-adeb4810a108",
+      "title": "Add a book",
+      "type": "HTML_SCREEN",
+      "fields": [
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "AddBook.title"
+        },
+        {
+          "name": "author",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "AddBook.author"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "551b642a-a5bb-490d-881d-5bfbd19f187b",
+          "type": "OUTBOUND",
+          "title": "AddBook",
+          "elementType": "COMMAND"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Add book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "dcdf69a5-0129-433f-9d22-adeb4810a108",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "0dbd035a-f050-4d03-b9d6-7f5ed0950b2b",
+      "title": "A book is added to the catalogue",
+      "chapter": "Lending library",
+      "sliceName": "Add book",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [],
+      "when": [
+        {
+          "id": "551b642a-a5bb-490d-881d-5bfbd19f187b",
+          "title": "AddBook",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

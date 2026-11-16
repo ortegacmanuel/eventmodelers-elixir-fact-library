@@ -1,0 +1,513 @@
+{
+  "id": "c549c7aa-1fb8-4811-a26b-7d34aa9860fe",
+  "title": "Member's loans",
+  "status": "Done",
+  "sliceType": "STATE_VIEW",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [],
+  "events": [],
+  "readmodels": [
+    {
+      "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+      "title": "Member's loans",
+      "type": "READMODEL",
+      "fields": [
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "loanId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "dueOn",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Date",
+          "cardinality": "List",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "ae4b55fa-08cf-47ff-83a1-bbd73bacb51d",
+          "type": "OUTBOUND",
+          "title": "A member's loans",
+          "elementType": "HTML_SCREEN"
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "type": "INBOUND",
+          "title": "BookLent",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "type": "INBOUND",
+          "title": "BookAdded",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "type": "INBOUND",
+          "title": "BookTitleCorrected",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "type": "INBOUND",
+          "title": "BookReturned",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Member's loans",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "screens": [
+    {
+      "id": "ae4b55fa-08cf-47ff-83a1-bbd73bacb51d",
+      "title": "A member's loans",
+      "type": "HTML_SCREEN",
+      "fields": [
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "Member's loans.memberId"
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Member's loans.title"
+        },
+        {
+          "name": "dueOn",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Date",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Member's loans.dueOn"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "type": "INBOUND",
+          "title": "Member's loans",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Member's loans",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "ae4b55fa-08cf-47ff-83a1-bbd73bacb51d",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "d1a82c2c-7c00-447f-9e53-2700c21fd03e",
+      "title": "A member's open loans, with the book's current title",
+      "chapter": "Lending library",
+      "sliceName": "Member's loans",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [
+        {
+          "dueOn": "2026-11-17",
+          "title": "The Hobbit",
+          "bookId": "b1",
+          "loanId": "l1"
+        }
+      ],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        },
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "title": "BookTitleCorrected",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            }
+          ]
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b2"
+            },
+            {
+              "name": "title",
+              "example": "Dune"
+            },
+            {
+              "name": "author",
+              "example": "Frank Herbert"
+            }
+          ]
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l2"
+            },
+            {
+              "name": "bookId",
+              "example": "b2"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T10:00:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "5f0c2a8e-1b7d-4e2a-9c61-3a1f0e9b7d01",
+          "title": "Member's loans",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "QUERY",
+          "fields": [
+            {
+              "name": "memberId",
+              "example": "m1"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "title": "Member's loans",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "3e1e5a85-22da-49f4-a190-3d67a4bb3514",
+      "title": "A returned book leaves the member's loans",
+      "chapter": "Lending library",
+      "sliceName": "Member's loans",
+      "vertical": false,
+      "expectEmptyList": true,
+      "examples": [],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ],
+          "expectEmptyList": true
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "when": [
+        {
+          "id": "5f0c2a8e-1b7d-4e2a-9c61-3a1f0e9b7d02",
+          "title": "Member's loans",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "QUERY",
+          "fields": [
+            {
+              "name": "memberId",
+              "example": "m1"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "then": [
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "title": "Member's loans",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": [],
+          "expectEmptyList": true
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

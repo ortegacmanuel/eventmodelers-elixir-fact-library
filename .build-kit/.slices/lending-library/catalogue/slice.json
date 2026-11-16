@@ -1,0 +1,537 @@
+{
+  "id": "b76e3cd6-020b-47b0-a4ea-01ba76574928",
+  "title": "Catalogue",
+  "status": "Done",
+  "sliceType": "STATE_VIEW",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [],
+  "events": [],
+  "readmodels": [
+    {
+      "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+      "title": "Catalogue",
+      "type": "READMODEL",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "author",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "available",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Boolean",
+          "cardinality": "List",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "type": "INBOUND",
+          "title": "BookTitleCorrected",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "type": "INBOUND",
+          "title": "BookLent",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "type": "INBOUND",
+          "title": "BookReturned",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "67206f8c-577d-4ee1-8117-dfdeebf96aa5",
+          "type": "OUTBOUND",
+          "title": "Catalogue",
+          "elementType": "HTML_SCREEN"
+        },
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "type": "INBOUND",
+          "title": "BookAdded",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Catalogue",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "screens": [
+    {
+      "id": "67206f8c-577d-4ee1-8117-dfdeebf96aa5",
+      "title": "Catalogue",
+      "type": "HTML_SCREEN",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.bookId"
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.title"
+        },
+        {
+          "name": "author",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.author"
+        },
+        {
+          "name": "available",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Boolean",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.available"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "type": "INBOUND",
+          "title": "Catalogue",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Catalogue",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "67206f8c-577d-4ee1-8117-dfdeebf96aa5",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "ebdbb8aa-e2ff-44f9-846c-693641bba9be",
+      "title": "Every added book, with whether it can be lent",
+      "chapter": "Lending library",
+      "sliceName": "Catalogue",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [
+        {
+          "title": "The Hobbit",
+          "author": "J. R. R. Tolkien",
+          "bookId": "b1",
+          "available": false
+        },
+        {
+          "title": "Dune",
+          "author": "Frank Herbert",
+          "bookId": "b2",
+          "available": true
+        }
+      ],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        },
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b2"
+            },
+            {
+              "name": "title",
+              "example": "Dune"
+            },
+            {
+              "name": "author",
+              "example": "Frank Herbert"
+            }
+          ]
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [],
+      "then": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "title": "Catalogue",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "933196fb-fff8-4fc5-a616-70f8a331dd80",
+      "title": "A returned book is available again",
+      "chapter": "Lending library",
+      "sliceName": "Catalogue",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [
+        {
+          "title": "The Hobbit",
+          "author": "J. R. R. Tolkien",
+          "bookId": "b1",
+          "available": true
+        }
+      ],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [],
+      "then": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "title": "Catalogue",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "fb6a1c5f-c9c2-4e06-bd91-f1a0d0d6b21f",
+      "title": "A corrected title replaces the old one",
+      "chapter": "Lending library",
+      "sliceName": "Catalogue",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [
+        {
+          "title": "The Hobbit",
+          "author": "J. R. R. Tolkien",
+          "bookId": "b1",
+          "available": true
+        }
+      ],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        },
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "title": "BookTitleCorrected",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            }
+          ]
+        }
+      ],
+      "when": [],
+      "then": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "title": "Catalogue",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "467790ec-86d0-4122-ace6-773c449acc8a",
+      "title": "An empty library has an empty catalogue",
+      "chapter": "Lending library",
+      "sliceName": "Catalogue",
+      "vertical": false,
+      "expectEmptyList": true,
+      "examples": [],
+      "given": [],
+      "when": [],
+      "then": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "title": "Catalogue",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": [],
+          "expectEmptyList": true
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

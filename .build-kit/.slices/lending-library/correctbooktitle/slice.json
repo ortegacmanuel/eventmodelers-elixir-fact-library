@@ -1,0 +1,365 @@
+{
+  "id": "e0010c51-b315-4204-acfc-465c3b562d0d",
+  "title": "Correct book title",
+  "status": "Done",
+  "sliceType": "STATE_CHANGE",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [
+    {
+      "id": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+      "title": "CorrectBookTitle",
+      "type": "COMMAND",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "dcee0f7c-af00-4f80-a13f-8a1d060e17d4",
+          "type": "INBOUND",
+          "title": "Correct a book's title",
+          "elementType": "HTML_SCREEN"
+        },
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "type": "OUTBOUND",
+          "title": "BookTitleCorrected",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Correct book title",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "events": [
+    {
+      "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+      "title": "BookTitleCorrected",
+      "type": "EVENT",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "type": "OUTBOUND",
+          "title": "Catalogue",
+          "elementType": "READMODEL"
+        },
+        {
+          "id": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+          "type": "INBOUND",
+          "title": "CorrectBookTitle",
+          "elementType": "COMMAND"
+        },
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "type": "OUTBOUND",
+          "title": "Member's loans",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Library",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Correct book title",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "readmodels": [],
+  "screens": [
+    {
+      "id": "dcee0f7c-af00-4f80-a13f-8a1d060e17d4",
+      "title": "Correct a book's title",
+      "type": "HTML_SCREEN",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "CorrectBookTitle.bookId"
+        },
+        {
+          "name": "books",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.title"
+        },
+        {
+          "name": "authors",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.author"
+        },
+        {
+          "name": "title",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "CorrectBookTitle.title"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+          "type": "OUTBOUND",
+          "title": "CorrectBookTitle",
+          "elementType": "COMMAND"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Correct book title",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "dcee0f7c-af00-4f80-a13f-8a1d060e17d4",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "999a52a3-2ada-414a-b8cd-ac6c9a5a57c2",
+      "title": "The title of an added book is corrected",
+      "chapter": "Lending library",
+      "sliceName": "Correct book title",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+          "title": "CorrectBookTitle",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "f7aabe8c-9cf8-4f9b-a338-17e545aaad80",
+          "title": "BookTitleCorrected",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9c7b9e21-1e2f-4013-96cb-884eccefb43e",
+      "title": "A book that was never added can't be corrected",
+      "chapter": "Lending library",
+      "sliceName": "Correct book title",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [],
+      "when": [
+        {
+          "id": "96cbe491-9a4c-42cb-bf91-b64cd6d1612e",
+          "title": "CorrectBookTitle",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b9"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "1cc51a6c-d7b5-444b-a6a2-6d4c27b04220",
+          "title": "A book that was never added can't be corrected",
+          "description": "book_not_found",
+          "type": "SPEC_ERROR",
+          "fields": []
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

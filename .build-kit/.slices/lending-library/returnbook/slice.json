@@ -1,0 +1,534 @@
+{
+  "id": "97362752-b03f-4849-8281-6cb414559284",
+  "title": "Return book",
+  "status": "Done",
+  "sliceType": "STATE_CHANGE",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [
+    {
+      "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+      "title": "ReturnBook",
+      "type": "COMMAND",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "returnedAt",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": true,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "DateTime",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "c150cd06-3376-4038-ae81-169462a5c1e6",
+          "type": "INBOUND",
+          "title": "Return a book",
+          "elementType": "HTML_SCREEN"
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "type": "OUTBOUND",
+          "title": "BookReturned",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Return book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "events": [
+    {
+      "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+      "title": "BookReturned",
+      "type": "EVENT",
+      "fields": [
+        {
+          "name": "loanId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": true,
+          "tag": false,
+          "type": "String",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "returnedAt",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "DateTime",
+          "cardinality": "Single",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+          "type": "INBOUND",
+          "title": "ReturnBook",
+          "elementType": "COMMAND"
+        },
+        {
+          "id": "29b3f7fa-28c6-4afc-a77d-758c473f0dc5",
+          "type": "OUTBOUND",
+          "title": "Catalogue",
+          "elementType": "READMODEL"
+        },
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "type": "OUTBOUND",
+          "title": "Overdue loans to remind",
+          "elementType": "READMODEL"
+        },
+        {
+          "id": "da3f7d47-cc48-425d-bde8-3d1a5cfb1847",
+          "type": "OUTBOUND",
+          "title": "Member's loans",
+          "elementType": "READMODEL"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Library",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Return book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "readmodels": [],
+  "screens": [
+    {
+      "id": "c150cd06-3376-4038-ae81-169462a5c1e6",
+      "title": "Return a book",
+      "type": "HTML_SCREEN",
+      "fields": [
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "Single",
+          "subfields": [],
+          "mapping": "ReturnBook.bookId"
+        },
+        {
+          "name": "books",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.title"
+        },
+        {
+          "name": "authors",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.author"
+        },
+        {
+          "name": "available",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Boolean",
+          "cardinality": "List",
+          "subfields": [],
+          "mapping": "Catalogue.available"
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+          "type": "OUTBOUND",
+          "title": "ReturnBook",
+          "elementType": "COMMAND"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Librarian",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Return book",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "c150cd06-3376-4038-ae81-169462a5c1e6",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "770fee4e-0970-4138-9e71-880dad5db94d",
+      "title": "A lent book is returned",
+      "chapter": "Lending library",
+      "sliceName": "Return book",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+          "title": "ReturnBook",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ead235b7-45df-4e0a-bbbe-9026e99022b5",
+      "title": "A book that isn't lent can't be returned",
+      "chapter": "Lending library",
+      "sliceName": "Return book",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "4a687943-0531-43db-bf04-a4b18e5143b8",
+          "title": "BookAdded",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "title",
+              "example": "The Hobbit"
+            },
+            {
+              "name": "author",
+              "example": "J. R. R. Tolkien"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+          "title": "ReturnBook",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "95605ee2-e00e-4c21-b315-3994ad108e8e",
+          "title": "A book that isn't lent can't be returned",
+          "description": "book_not_lent",
+          "type": "SPEC_ERROR",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "72e7c159-864f-4908-954d-9a7459e2b01d",
+      "title": "A book already returned can't be returned twice",
+      "chapter": "Lending library",
+      "sliceName": "Return book",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-17"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-10T17:30:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "41717c97-03e3-4d88-8212-f74a0fcfb825",
+          "title": "ReturnBook",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "COMMAND",
+          "fields": [
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-11T09:00:00Z"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "2de4d861-6ee8-4e86-98fe-7e161cbe3bf9",
+          "title": "A book already returned can't be returned twice",
+          "description": "book_not_lent",
+          "type": "SPEC_ERROR",
+          "fields": []
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}

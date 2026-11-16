@@ -1,0 +1,442 @@
+{
+  "id": "6412eba1-648e-4814-b9f4-45e9a42a0474",
+  "title": "Overdue loans to remind",
+  "status": "Done",
+  "sliceType": "STATE_VIEW",
+  "chapter": "Lending library",
+  "context": "Lending library",
+  "commands": [],
+  "events": [],
+  "readmodels": [
+    {
+      "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+      "title": "Overdue loans to remind",
+      "type": "READMODEL",
+      "fields": [
+        {
+          "name": "today",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Date",
+          "cardinality": "Single",
+          "subfields": []
+        },
+        {
+          "name": "loanId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "bookId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "UUID",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "memberId",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "String",
+          "cardinality": "List",
+          "subfields": []
+        },
+        {
+          "name": "dueOn",
+          "optional": false,
+          "showAttributes": false,
+          "technicalAttribute": false,
+          "query": false,
+          "generated": false,
+          "edited": false,
+          "idAttribute": false,
+          "tag": false,
+          "type": "Date",
+          "cardinality": "List",
+          "subfields": []
+        }
+      ],
+      "dependencies": [
+        {
+          "id": "5381dcda-d301-4e6a-a26d-b49d4216081c",
+          "type": "OUTBOUND",
+          "title": "Reminder sender",
+          "elementType": "AUTOMATION"
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "type": "INBOUND",
+          "title": "BookLent",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "type": "INBOUND",
+          "title": "BookReturned",
+          "elementType": "EVENT"
+        },
+        {
+          "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+          "type": "INBOUND",
+          "title": "ReminderSent",
+          "elementType": "EVENT"
+        }
+      ],
+      "modelContext": "Lending library",
+      "lane": "Interaction",
+      "aggregate": "default",
+      "aggregateDependencies": [],
+      "triggers": [],
+      "tags": [],
+      "slice": "Overdue loans to remind",
+      "description": "",
+      "context": "INTERNAL",
+      "elementContext": "INTERNAL",
+      "listElement": false,
+      "todoList": false,
+      "createsAggregate": false,
+      "elementCopy": false,
+      "linkedId": "351ca947-5976-47e3-85f9-cfafe71cd684",
+      "sketched": false,
+      "comments": []
+    }
+  ],
+  "screens": [],
+  "processors": [],
+  "tables": [],
+  "specifications": [
+    {
+      "id": "1fbee6cc-9dd8-4737-b63e-c0d60b83e2c1",
+      "title": "A loan past its due date waits for its reminder",
+      "chapter": "Lending library",
+      "sliceName": "Overdue loans to remind",
+      "vertical": false,
+      "expectEmptyList": false,
+      "examples": [
+        {
+          "dueOn": "2026-11-18",
+          "bookId": "b3",
+          "loanId": "l3",
+          "memberId": "m2"
+        }
+      ],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l1"
+            },
+            {
+              "name": "bookId",
+              "example": "b1"
+            },
+            {
+              "name": "memberId",
+              "example": "m1"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-19"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-03T10:00:00Z"
+            }
+          ]
+        },
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ]
+        }
+      ],
+      "when": [
+        {
+          "id": "6a1d3b9f-2c8e-4f3b-8d72-4b2a1f0c8e01",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "QUERY",
+          "fields": [
+            {
+              "name": "today",
+              "example": "2026-11-19"
+            }
+          ]
+        }
+      ],
+      "then": [
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": []
+        }
+      ]
+    },
+    {
+      "id": "9d673ee1-0873-4b84-a716-1dc619099047",
+      "title": "A reminded loan leaves the list",
+      "chapter": "Lending library",
+      "sliceName": "Overdue loans to remind",
+      "vertical": false,
+      "expectEmptyList": true,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        },
+        {
+          "id": "1f0ff190-74f0-4e6a-bc30-c6f899f79725",
+          "title": "ReminderSent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "sentAt",
+              "example": "2026-11-19T08:00:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "when": [
+        {
+          "id": "6a1d3b9f-2c8e-4f3b-8d72-4b2a1f0c8e02",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "QUERY",
+          "fields": [
+            {
+              "name": "today",
+              "example": "2026-11-20"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "then": [
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": [],
+          "expectEmptyList": true
+        }
+      ]
+    },
+    {
+      "id": "4f3830c0-7740-450a-b39b-df5545f7dc80",
+      "title": "A returned loan leaves the list",
+      "chapter": "Lending library",
+      "sliceName": "Overdue loans to remind",
+      "vertical": false,
+      "expectEmptyList": true,
+      "examples": [],
+      "given": [
+        {
+          "id": "d8cd40b5-7e96-4e19-82aa-7722cd5b78b5",
+          "title": "BookLent",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "dueOn",
+              "example": "2026-11-18"
+            },
+            {
+              "name": "lentAt",
+              "example": "2026-11-04T09:15:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        },
+        {
+          "id": "3884f303-9df9-4bba-8c3d-d45fe53f9e41",
+          "title": "BookReturned",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "EVENT",
+          "fields": [
+            {
+              "name": "loanId",
+              "example": "l3"
+            },
+            {
+              "name": "bookId",
+              "example": "b3"
+            },
+            {
+              "name": "memberId",
+              "example": "m2"
+            },
+            {
+              "name": "returnedAt",
+              "example": "2026-11-19T07:55:00Z"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "when": [
+        {
+          "id": "6a1d3b9f-2c8e-4f3b-8d72-4b2a1f0c8e03",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "QUERY",
+          "fields": [
+            {
+              "name": "today",
+              "example": "2026-11-20"
+            }
+          ],
+          "expectEmptyList": true
+        }
+      ],
+      "then": [
+        {
+          "id": "351ca947-5976-47e3-85f9-cfafe71cd684",
+          "title": "Overdue loans to remind",
+          "tags": [],
+          "index": 0,
+          "specRow": 0,
+          "type": "READMODEL",
+          "fields": [],
+          "expectEmptyList": true
+        }
+      ]
+    }
+  ],
+  "actors": [],
+  "aggregates": [],
+  "screenImages": [],
+  "comments": []
+}
