@@ -135,3 +135,31 @@ Learnings:
   - When folding events from two scopes, key the state by the event's own id (loan id) and filter by the command's ids in execute — apply_event doesn't see the command.
 ---
 - 2026-11-16T10:40:59+01:00 Lend book: committed dfba402, FF-merged to main, status Done on board and in index.json; learning recorded.
+
+## 2026-11-16T09:41:24Z — Task 33c9497b-33a7-4c9b-9dc1-f0621f6f6801
+
+Slice: Lend book (6174752c-91ef-4bec-8d17-ba50c7ab7da8)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; id resolves to "Lend book" in the local index (.build-kit/.slices/lending-library/lendbook/slice.json).
+- Already built and committed as dfba402 "feat: Lend book" (LendBook command, BookLent event tagged loan:/book:/member:, Core rejects :book_not_found / :book_already_lent / :member_holds_two_books; 6 scenarios green; screen brief docs/screens/lend-book.md), followed by 8ea15a9 "chore: Lend book done".
+- Task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event echoes our own status update after a build.
+---
+- 2026-11-16T10:41:47+01:00 Member's loans: slice already InProgress (claimed by loop); branch feature/memberloans; slice.json full (STATE_VIEW), no comments, no backendPrompt.
+
+## 2026-11-16 - Member's loans
+
+- Slice was already InProgress (claimed by the loop), branch feature/memberloans. slice.json full (STATE_VIEW); no comments, no backendPrompt.
+- Built via /build-state-view: Core queries BookLent/BookReturned by member:<id>, and next_query reads BookAdded/BookTitleCorrected by book:<id> for each open loan to get the current title. project returns [%{loan_id, book_id, title, due_on}] in lend order. Context.member_s_loans/1.
+- 2 scenarios as describes; mix precommit green (32 tests); slice tests green.
+- Screen brief docs/screens/member-s-loans.md (mockup on board node ae4b55fa).
+- Files: lib/library/slices/member_s_loans/{core,context}.ex, test/library/slices/member_s_loans/core_test.exs, docs/screens/member-s-loans.md
+- No test-analyzer skill in this kit; skipped.
+- **Learnings for future iterations:**
+  - Slice folder = title NFD-stripped, downcased, non-alnum -> "_" ("Member's loans" -> member_s_loans). scenario_tests_test.exs SILENTLY skips a test dir with any other name.
+  - A view scoped by one tag that needs data from events carrying only another tag: use next_query/1 over the folded ids.
+---
