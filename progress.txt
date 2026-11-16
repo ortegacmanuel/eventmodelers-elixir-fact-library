@@ -1,0 +1,16 @@
+## Codebase Patterns
+- Write slice with only idempotency: query = event type scoped by its id tag; execute returns {:ok, []} when already folded.
+- Slice folder/module naming: lib/library/slices/<snake_slice>/ (e.g. add_book), command module = slice name (AddBook.AddBook).
+- No test-analyzer skill ships in this kit (step 14 of the loop prompt): skip and note it.
+
+## 2026-11-16 - Add book
+
+- Claimed slice (board InProgress), branch feature/addbook. slice.json was full (not a stub), no comments, no backendPrompt.
+- Built via /build-state-change: AddBook command (book_id generated in context), BookAdded event (tag book:), Core (idempotent on book id), Context.add_book/1.
+- Test: "A book is added to the catalogue". Screen brief docs/screens/add-book.md (mockup on board node dcdf69a5).
+- mix precommit green; slice test green.
+- Files: lib/library/slices/add_book/*, test/library/slices/add_book/core_test.exs, docs/screens/add-book.md
+- **Learnings for future iterations:**
+  - BookAdded carries tag book:<id>; Catalogue / Member's loans read it as d["book_id"], d["title"], d["author"].
+  - The board's HTML mockup is reachable via mcp__eventmodelers__get_node on the screen id.
+---
