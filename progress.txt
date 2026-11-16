@@ -164,3 +164,32 @@ Learnings:
   - A view scoped by one tag that needs data from events carrying only another tag: use next_query/1 over the folded ids.
 ---
 - 2026-11-16T10:43:18+01:00 Member's loans: committed d59db90, FF-merged to main, status Done on board and in index.json; learnings recorded.
+
+## 2026-11-16T09:43:42Z — Task a64d88bf-3b52-4b0c-99f7-9ff453aa26e1
+
+Slice: Member's loans (c549c7aa-1fb8-4811-a26b-7d34aa9860fe)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; id resolves to "Member's loans" in .build-kit/.slices/lending-library/index.json.
+- Already built and committed as d59db90 "feat: Member's loans" (STATE_VIEW: BookLent/BookReturned by member:<id>, titles via next_query over book:<id>; 2 scenarios green; screen brief docs/screens/member-s-loans.md), followed by adca436 "chore: Member's loans done".
+- Task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event echoes our own status update after a build.
+---
+- 2026-11-16T10:44:11+01:00 Overdue loans to remind: slice already InProgress (claimed by loop); branch feature/overdueloanstoremind; slice.json full (STATE_VIEW, TODO queue for Send reminder), no comments, no backendPrompt.
+
+## 2026-11-16 - Overdue loans to remind
+
+- Slice was already InProgress (claimed by the loop), branch feature/overdueloanstoremind. slice.json full (STATE_VIEW); no comments, no backendPrompt, no screens (so no screen brief).
+- Built via /build-state-view: Core is a TODO queue (query by types BookLent, BookReturned, ReminderSent, no tag; the consumer is the Send reminder processor). Folds open loans by loan id; BookReturned and ReminderSent drop the loan; project/2 keeps loans with due_on < today, in the order they were lent.
+- Context.overdue_loans_to_remind(%Date{} = today) -> [%{loan_id, book_id, member_id, due_on: Date}], the signature the Send reminder processor already assumed. That processor now finds its queue.
+- 3 scenarios as describes; mix precommit green (35 tests); slice tests green.
+- No test-analyzer skill in this kit; skipped.
+- Files: lib/library/slices/overdue_loans_to_remind/{core,context}.ex, test/library/slices/overdue_loans_to_remind/core_test.exs
+- **Learnings for future iterations:**
+  - "Overdue" from the board's example: due_on before today (a loan due today is not listed).
+  - Dates come back from FACT as ISO strings; parse with Date.from_iso8601!/1 in apply_event when the view compares them.
+  - The "assumed queue" comment in send_reminder/processor.ex is now stale; it lives in another slice, so it was left alone.
+---
