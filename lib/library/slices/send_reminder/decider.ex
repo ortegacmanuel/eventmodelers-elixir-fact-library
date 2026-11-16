@@ -1,4 +1,4 @@
-defmodule Library.Slices.SendReminder.Core do
+defmodule Library.Slices.SendReminder.Decider do
   use Library.StateChange
 
   alias Library.Slices.SendReminder.{ReminderSent, SendReminder}

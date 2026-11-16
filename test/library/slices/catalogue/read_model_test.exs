@@ -4,7 +4,7 @@ defmodule Library.Slices.Catalogue.CoreTest do
   import Library.Scenario
 
   alias Library.Slices.AddBook.BookAdded
-  alias Library.Slices.Catalogue.Core
+  alias Library.Slices.Catalogue.ReadModel
 
   describe "Every added book, with whether it can be lent" do
     test "a lent book is not available, one never lent is" do
@@ -23,7 +23,7 @@ defmodule Library.Slices.Catalogue.CoreTest do
           tags: ["loan:l1", "book:b1", "member:m1"]
         }
       ])
-      |> read(Core, nil)
+      |> read(ReadModel, nil)
       |> expect([
         %{book_id: "b1", title: "The Hobbit", author: "J. R. R. Tolkien", available: false},
         %{book_id: "b2", title: "Dune", author: "Frank Herbert", available: true}
@@ -57,7 +57,7 @@ defmodule Library.Slices.Catalogue.CoreTest do
           tags: ["loan:l1", "book:b1", "member:m1"]
         }
       ])
-      |> read(Core, nil)
+      |> read(ReadModel, nil)
       |> expect([
         %{book_id: "b1", title: "The Hobbit", author: "J. R. R. Tolkien", available: true}
       ])
@@ -74,7 +74,7 @@ defmodule Library.Slices.Catalogue.CoreTest do
           tags: ["book:b1"]
         }
       ])
-      |> read(Core, nil)
+      |> read(ReadModel, nil)
       |> expect([
         %{book_id: "b1", title: "The Hobbit", author: "J. R. R. Tolkien", available: true}
       ])
@@ -84,7 +84,7 @@ defmodule Library.Slices.Catalogue.CoreTest do
   describe "An empty library has an empty catalogue" do
     test "no books, no rows" do
       given([])
-      |> read(Core, nil)
+      |> read(ReadModel, nil)
       |> expect([])
     end
   end

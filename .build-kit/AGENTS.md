@@ -39,7 +39,7 @@
 ## The screen brief
 - If the slice has `screens`, alongside the domain you write `docs/screens/<slice>.md`. Template and rules in `.build-kit/CLAUDE.md`.
 - **The section that earns its keep is "What the domain does NOT give you".** It's what stops whoever builds the view from inventing fields or asking the domain for them without cause. Write it even if the rest ends up short.
-- The **error atoms** from `Core` always go in: the screen translates them into messages and can't guess them from `slice.json`.
+- The **error atoms** from the `Decider` always go in: the screen translates them into messages and can't guess them from `slice.json`.
 - It lives in `docs/` and not `.build-kit/` on purpose: `.build-kit/` is regenerated on every fetch and the brief has to survive.
 
 ## About automation slices
@@ -48,11 +48,11 @@
 
 ## About write slices
 - A decision spanning two consistency boundaries (e.g. book and member) is one DCB read: query/1 returns a list of Fact.QueryItem (OR-ed by Reader), each scoped by its own tag; append_condition follows. apply_event doesn't see the command, so fold keyed by the event's own id (e.g. open loans by loan_id) and filter by the command's ids inside execute/2.
-- A command naming one id (e.g. bookId) whose event needs others (loanId, memberId): fold them from the history in Core and copy them into the event — the command keeps only the board's fields. Two SPEC_ERROR scenarios with the same board code are one atom and one execute clause.
+- A command naming one id (e.g. bookId) whose event needs others (loanId, memberId): fold them from the history in the Decider and copy them into the event — the command keeps only the board's fields. Two SPEC_ERROR scenarios with the same board code are one atom and one execute clause.
 
 ## Slice layout
 - Slice folder/module name = title NFD-stripped, downcased, every non-alnum run -> '_' ("Member's loans" -> member_s_loans, MemberSLoans). scenario_tests_test.exs silently skips test dirs with any other name.
 
 ## Read slices
 - A view scoped by one tag that needs fields from events carrying only another tag (title on book:-tagged events, view by member:): fold the ids, then next_query/1 returns one QueryItem per id.
-- Date fields come back from FACT as ISO strings; a view that compares dates parses them with Date.from_iso8601!/1 in apply_event and takes the reference date (today) as the read argument, filtering in project/2 — never Date.utc_today() in Core.
+- Date fields come back from FACT as ISO strings; a view that compares dates parses them with Date.from_iso8601!/1 in apply_event and takes the reference date (today) as the read argument, filtering in project/2 — never Date.utc_today() in the ReadModel.

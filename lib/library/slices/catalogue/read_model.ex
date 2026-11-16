@@ -1,4 +1,4 @@
-defmodule Library.Slices.Catalogue.Core do
+defmodule Library.Slices.Catalogue.ReadModel do
   @behaviour Library.StateView
 
   # The whole catalogue, every book: read by types, not scoped by a book: tag.

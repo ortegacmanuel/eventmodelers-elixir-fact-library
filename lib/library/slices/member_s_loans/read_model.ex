@@ -1,4 +1,4 @@
-defmodule Library.Slices.MemberSLoans.Core do
+defmodule Library.Slices.MemberSLoans.ReadModel do
   @behaviour Library.StateView
 
   @impl true

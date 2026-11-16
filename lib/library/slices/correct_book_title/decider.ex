@@ -1,4 +1,4 @@
-defmodule Library.Slices.CorrectBookTitle.Core do
+defmodule Library.Slices.CorrectBookTitle.Decider do
   use Library.StateChange
 
   alias Library.Slices.CorrectBookTitle.{BookTitleCorrected, CorrectBookTitle}

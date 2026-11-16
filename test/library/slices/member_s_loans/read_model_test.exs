@@ -6,7 +6,7 @@ defmodule Library.Slices.MemberSLoans.CoreTest do
   alias Library.Slices.AddBook.BookAdded
   alias Library.Slices.CorrectBookTitle.BookTitleCorrected
   alias Library.Slices.LendBook.BookLent
-  alias Library.Slices.MemberSLoans.Core
+  alias Library.Slices.MemberSLoans.ReadModel
 
   describe "A member's open loans, with the book's current title" do
     test "only m1's loan, titled as corrected" do
@@ -29,7 +29,7 @@ defmodule Library.Slices.MemberSLoans.CoreTest do
           lent_at: "2026-11-04T10:00:00Z"
         }
       ])
-      |> read(Core, "m1")
+      |> read(ReadModel, "m1")
       |> expect([%{loan_id: "l1", book_id: "b1", title: "The Hobbit", due_on: "2026-11-17"}])
     end
   end
@@ -56,7 +56,7 @@ defmodule Library.Slices.MemberSLoans.CoreTest do
           tags: ["loan:l1", "book:b1", "member:m1"]
         }
       ])
-      |> read(Core, "m1")
+      |> read(ReadModel, "m1")
       |> expect([])
     end
   end

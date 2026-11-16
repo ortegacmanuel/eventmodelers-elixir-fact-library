@@ -1,4 +1,4 @@
-defmodule Library.Slices.ReturnBook.Core do
+defmodule Library.Slices.ReturnBook.Decider do
   use Library.StateChange
 
   alias Library.Slices.ReturnBook.{BookReturned, ReturnBook}

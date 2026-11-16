@@ -1,4 +1,4 @@
-defmodule Library.Slices.LendBook.Core do
+defmodule Library.Slices.LendBook.Decider do
   use Library.StateChange
 
   alias Library.Slices.LendBook.{BookLent, LendBook}

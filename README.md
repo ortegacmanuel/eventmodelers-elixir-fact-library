@@ -32,9 +32,9 @@ of each slice — fields, events, scenarios, screens — as fetched from the boa
 | Send reminder | automation | Overdue loans to remind | `SendReminder` → `ReminderSent` | — |
 
 The rules are the board's scenarios, one `describe` each in
-`test/library/slices/<slice>/core_test.exs`. Lend book, for instance: a book
-already lent can't be lent again, and a member holding two books can't borrow a
-third.
+`test/library/slices/<slice>/decider_test.exs` (or `read_model_test.exs` for a
+read slice). Lend book, for instance: a book already lent can't be lent again,
+and a member holding two books can't borrow a third.
 
 **The automation follows Event Modeling's TODO-list pattern.** A lent book
 whose due date has passed is on *Overdue loans to remind*; its return, or its
@@ -78,7 +78,7 @@ checks that the two agree.
 
 | path | what |
 |---|---|
-| `lib/library/slices/<slice>/` | one folder per slice: `core.ex` (the pure decision or fold), `context.ex`, command and events; `processor.ex` for the automation |
+| `lib/library/slices/<slice>/` | one folder per slice: `decider.ex` (a write slice's pure decision) or `read_model.ex` (a read slice's pure fold), `context.ex`, command and events; `processor.ex` for the automation. How these fit together: [the kit's *Three ideas, one slice*](https://github.com/ortegacmanuel/eventmodelers-elixir-fact-kit#three-ideas-one-slice) |
 | `lib/library/` | the kit's framework: `decide`, `reader`, `state_change`, `state_view`, `command`, `event` |
 | `test/library/slices/<slice>/` | the board's scenarios, and nothing else |
 | `test/library/` | the kit's guards: slice isolation, scenario tests only, every TODO list exposes `pending/0`, … |

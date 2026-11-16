@@ -5,7 +5,7 @@ defmodule Library.Slices.ReturnBook.CoreTest do
 
   alias Library.Slices.AddBook.BookAdded
   alias Library.Slices.LendBook.BookLent
-  alias Library.Slices.ReturnBook.{BookReturned, Core, ReturnBook}
+  alias Library.Slices.ReturnBook.{BookReturned, Decider, ReturnBook}
 
   describe "A lent book is returned" do
     test "returning a lent book records BookReturned for its loan" do
@@ -18,7 +18,7 @@ defmodule Library.Slices.ReturnBook.CoreTest do
           lent_at: "2026-11-03T10:00:00Z"
         }
       ])
-      |> decide(Core, %ReturnBook{book_id: "b1", returned_at: "2026-11-10T17:30:00Z"})
+      |> decide(Decider, %ReturnBook{book_id: "b1", returned_at: "2026-11-10T17:30:00Z"})
       |> expect(
         {:ok,
          [
@@ -36,7 +36,7 @@ defmodule Library.Slices.ReturnBook.CoreTest do
   describe "A book that isn't lent can't be returned" do
     test "returning a book on the shelf is rejected with book_not_lent" do
       given([%BookAdded{book_id: "b1", title: "The Hobbit", author: "J. R. R. Tolkien"}])
-      |> decide(Core, %ReturnBook{book_id: "b1", returned_at: "2026-11-10T17:30:00Z"})
+      |> decide(Decider, %ReturnBook{book_id: "b1", returned_at: "2026-11-10T17:30:00Z"})
       |> expect({:error, :book_not_lent})
     end
   end
@@ -58,7 +58,7 @@ defmodule Library.Slices.ReturnBook.CoreTest do
           returned_at: "2026-11-10T17:30:00Z"
         }
       ])
-      |> decide(Core, %ReturnBook{book_id: "b1", returned_at: "2026-11-11T09:00:00Z"})
+      |> decide(Decider, %ReturnBook{book_id: "b1", returned_at: "2026-11-11T09:00:00Z"})
       |> expect({:error, :book_not_lent})
     end
   end

@@ -1,4 +1,4 @@
-defmodule Library.Slices.OverdueLoansToRemind.Core do
+defmodule Library.Slices.OverdueLoansToRemind.ReadModel do
   @behaviour Library.StateView
 
   # A TODO queue for the reminder processor: read by types, not scoped by a tag.

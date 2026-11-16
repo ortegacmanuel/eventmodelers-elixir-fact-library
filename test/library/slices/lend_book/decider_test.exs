@@ -4,12 +4,12 @@ defmodule Library.Slices.LendBook.CoreTest do
   import Library.Scenario
 
   alias Library.Slices.AddBook.BookAdded
-  alias Library.Slices.LendBook.{BookLent, Core, LendBook}
+  alias Library.Slices.LendBook.{BookLent, Decider, LendBook}
 
   describe "An added book is lent to a member" do
     test "lending an added book records BookLent" do
       given([%BookAdded{book_id: "b1", title: "The Hobbit", author: "J. R. R. Tolkien"}])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l1",
         book_id: "b1",
         member_id: "m1",
@@ -34,7 +34,7 @@ defmodule Library.Slices.LendBook.CoreTest do
   describe "A book that was never added can't be lent" do
     test "lending an unknown book is rejected with book_not_found" do
       given([])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l1",
         book_id: "b9",
         member_id: "m1",
@@ -57,7 +57,7 @@ defmodule Library.Slices.LendBook.CoreTest do
           lent_at: "2026-11-03T10:00:00Z"
         }
       ])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l2",
         book_id: "b1",
         member_id: "m2",
@@ -90,7 +90,7 @@ defmodule Library.Slices.LendBook.CoreTest do
           tags: ["loan:l1", "book:b1", "member:m1"]
         }
       ])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l2",
         book_id: "b1",
         member_id: "m2",
@@ -131,7 +131,7 @@ defmodule Library.Slices.LendBook.CoreTest do
           lent_at: "2026-11-04T10:00:00Z"
         }
       ])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l3",
         book_id: "b3",
         member_id: "m1",
@@ -171,7 +171,7 @@ defmodule Library.Slices.LendBook.CoreTest do
           tags: ["loan:l1", "book:b1", "member:m1"]
         }
       ])
-      |> decide(Core, %LendBook{
+      |> decide(Decider, %LendBook{
         loan_id: "l3",
         book_id: "b3",
         member_id: "m1",

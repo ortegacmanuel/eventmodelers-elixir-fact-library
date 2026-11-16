@@ -1,5 +1,5 @@
 defmodule Library.Slices.ReturnBook.Context do
-  alias Library.Slices.ReturnBook.{Core, ReturnBook}
+  alias Library.Slices.ReturnBook.{Decider, ReturnBook}
 
   require Logger
 
@@ -12,7 +12,7 @@ defmodule Library.Slices.ReturnBook.Context do
   end
 
   defp write(cmd) do
-    Library.Decide.execute(Library.Application.fact_db(), Core, cmd)
+    Library.Decide.execute(Library.Application.fact_db(), Decider, cmd)
   rescue
     e in RuntimeError ->
       Logger.error("could not write: #{Exception.message(e)}")

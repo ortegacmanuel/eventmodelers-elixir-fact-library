@@ -1,4 +1,4 @@
-defmodule Library.Slices.AddBook.Core do
+defmodule Library.Slices.AddBook.Decider do
   use Library.StateChange
 
   alias Library.Slices.AddBook.{AddBook, BookAdded}

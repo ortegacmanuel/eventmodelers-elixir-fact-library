@@ -1,11 +1,11 @@
-defmodule Library.CoreContractTest do
+defmodule Library.SliceContractTest do
   use ExUnit.Case, async: true
 
   @contract ~w(query append_condition initial_state apply_event execute next_query project)
 
-  test "a slice's core.ex defines only the contract's functions" do
+  test "a slice's decider.ex or read_model.ex defines only the contract's functions" do
     offences =
-      for file <- Path.wildcard("lib/library/slices/*/core.ex"),
+      for file <- Path.wildcard("lib/library/slices/*/{decider,read_model}.ex"),
           [_, name] <- Regex.scan(~r/^\s*defp?\s+([a-z_][a-zA-Z0-9_?!]*)/m, File.read!(file)),
           name not in @contract,
           uniq: true,
