@@ -17,7 +17,12 @@ defmodule LibraryWeb.Router do
   scope "/", LibraryWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", CatalogueLive
+    live "/books/new", AddBookLive
+    live "/books/correct-title", CorrectBookTitleLive
+    live "/loans/new", LendBookLive
+    live "/returns/new", ReturnBookLive
+    live "/members/loans", MemberLoansLive
   end
 
   # Other scopes may use custom stacks.
