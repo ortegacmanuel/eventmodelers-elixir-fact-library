@@ -9,8 +9,8 @@ defmodule Library.Slices.SendReminder.Processor do
   # Guessed: a loan becomes overdue by the day, so a minute is ample.
   @poll_interval :timer.minutes(1)
 
-  # One sweep at a time: no external system is called, but two sweeps would race
-  # on the same loans and one would only collect :already_reminded.
+  # One sweep at a time: two sweeps would race on the same loans, mail the member
+  # twice, and one would only collect :already_reminded.
   @in_flight 1
 
   def start_link(opts), do: GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -19,8 +19,6 @@ defmodule Library.Slices.SendReminder.Processor do
 
   @impl true
   def init(opts) do
-    # Assumed queue API: the "Overdue loans to remind" slice is not built yet.
-    # Held as a value so the call stays dynamic until that module exists.
     state = %{queue: Keyword.get(opts, :queue, Queue), in_flight: %{}}
 
     if Keyword.get(opts, :start?, true), do: schedule()
@@ -74,6 +72,8 @@ defmodule Library.Slices.SendReminder.Processor do
   end
 
   defp remind(item) do
+    send_mail(item)
+
     case SendReminder.send_reminder(Map.take(item, [:loan_id, :book_id, :member_id])) do
       {:ok, _loan_id} ->
         true
@@ -82,6 +82,15 @@ defmodule Library.Slices.SendReminder.Processor do
         Logger.error("reminder for loan #{item.loan_id} not recorded: #{inspect(reason)}")
         false
     end
+  end
+
+  # The external system: a fake mailer that only logs, so the example runs
+  # without credentials. A real one goes here, and a failure returns before
+  # SendReminder so the loan stays in the queue for the next poll.
+  defp send_mail(item) do
+    Logger.info(
+      "Reminder sent: member #{item.member_id}, book #{item.book_id}, loan #{item.loan_id}"
+    )
   end
 
   defp schedule, do: Process.send_after(self(), :poll, @poll_interval)
