@@ -223,3 +223,4 @@ Learnings:
   - A command that names only one id (book) but whose event needs others (loan, member): fold them from the history in Core and copy them into the event; the command stays the board's fields.
   - Two SPEC_ERROR scenarios with the same board code are one atom and one execute clause.
 ---
+- 2026-11-16T10:46:51+01:00 Return book: committed c1051f8, FF-merged to main, status Done on board and in index.json; learning recorded.
