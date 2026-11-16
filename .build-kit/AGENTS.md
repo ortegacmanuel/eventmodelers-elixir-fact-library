@@ -43,7 +43,7 @@
 - It lives in `docs/` and not `.build-kit/` on purpose: `.build-kit/` is regenerated on every fetch and the brief has to survive.
 
 ## About automation slices
-- When an automation's TODO-queue slice isn't built yet, build against its assumed Context anyway (request-feedback forbids blocking on an unbuilt dependency): hold the queue module as a value in the processor state (Keyword.get(opts, :queue, Queue)) so the call stays dynamic and compile --warnings-as-errors stays green; the poll's rescue logs the UndefinedFunctionError until the queue exists.
+- An automation reads its TODO queue through `<Queue>.Context.pending/0` (the kit's convention; the queue's Context reads the clock itself). When the queue slice isn't built yet, build against that name anyway (request-feedback forbids blocking on an unbuilt dependency): hold the queue module as a value in the processor state (Keyword.get(opts, :queue, Queue)) so compile --warnings-as-errors stays green; the poll's rescue logs the UndefinedFunctionError until the queue exists, and test/library/automation_queue_test.exs checks both agree once it does.
 - An automation with no external system (just records our own fact) still runs its sweep in a Task under Library.TaskSupervisor, one sweep in flight (room_for?/1 tested under @moduletag :extra). The sweep returns :done on an empty queue so a success doesn't chain into itself.
 
 ## About write slices

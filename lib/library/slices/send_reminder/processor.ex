@@ -61,7 +61,7 @@ defmodule Library.Slices.SendReminder.Processor do
 
   # :done when nothing was pending, so an empty queue doesn't chain into itself.
   defp sweep(queue) do
-    case queue.overdue_loans_to_remind(Date.utc_today()) do
+    case queue.pending() do
       [] -> :done
       items -> if Enum.all?(items, &remind/1), do: :ok, else: :error
     end
