@@ -14,6 +14,8 @@ written afterwards, by hand, from the screen briefs the loop left in
 
 ## The model
 
+[![The "Lending library" chapter on the board: one column per slice — screens, commands and read models, events, and the scenarios underneath](docs/model.png)](docs/model.png)
+
 The board isn't public, so the model travels with the code:
 `.build-kit/.slices/lending-library/<slice>/slice.json` is the full definition
 of each slice — fields, events, scenarios, screens — as fetched from the board.
