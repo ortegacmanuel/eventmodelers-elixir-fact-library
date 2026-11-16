@@ -134,3 +134,4 @@ Learnings:
   - A decision spanning two boundaries (book and member) is one DCB query: `query/1` returns a list of QueryItems (OR-ed), each scoped by its own tag; the append condition follows automatically.
   - When folding events from two scopes, key the state by the event's own id (loan id) and filter by the command's ids in execute — apply_event doesn't see the command.
 ---
+- 2026-11-16T10:40:59+01:00 Lend book: committed dfba402, FF-merged to main, status Done on board and in index.json; learning recorded.

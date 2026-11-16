@@ -45,3 +45,6 @@
 ## About automation slices
 - When an automation's TODO-queue slice isn't built yet, build against its assumed Context anyway (request-feedback forbids blocking on an unbuilt dependency): hold the queue module as a value in the processor state (Keyword.get(opts, :queue, Queue)) so the call stays dynamic and compile --warnings-as-errors stays green; the poll's rescue logs the UndefinedFunctionError until the queue exists.
 - An automation with no external system (just records our own fact) still runs its sweep in a Task under Library.TaskSupervisor, one sweep in flight (room_for?/1 tested under @moduletag :extra). The sweep returns :done on an empty queue so a success doesn't chain into itself.
+
+## About write slices
+- A decision spanning two consistency boundaries (e.g. book and member) is one DCB read: query/1 returns a list of Fact.QueryItem (OR-ed by Reader), each scoped by its own tag; append_condition follows. apply_event doesn't see the command, so fold keyed by the event's own id (e.g. open loans by loan_id) and filter by the command's ids inside execute/2.
