@@ -104,3 +104,33 @@ Learnings:
   - AGENTS.md is generated: record learnings with `npx @eventmodelers/cli learn --topic ... --slice ...`.
 ---
 - 2026-11-16T10:38:23+01:00 Send reminder: committed 5bf4d2d, FF-merged to main, status Done on board and in index.json.
+
+## 2026-11-16T00:00:00Z — Task ecdcebc4-8d5a-460a-92d9-8a8ce86c2197
+
+Slice: Send reminder (fff86c00-5efc-4607-b951-1819ed238455)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; the id resolves to "Send reminder" in the local index (.build-kit/.slices/lending-library/sendreminder/slice.json, status Done).
+- Already built and committed as 5bf4d2d "feat: Send reminder" (SendReminder command, ReminderSent event tagged loan:, Core rejects :already_reminded / :loan_closed, processor polling the "Overdue loans to remind" queue against its assumed Context).
+- Open dependency: "Overdue loans to remind" is still unbuilt; it must expose Context.overdue_loans_to_remind(today) -> [%{loan_id, book_id, member_id, due_on}] and drop loans with ReminderSent.
+- The task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event echoes our own status update after a build and needs only a log entry.
+---
+- 2026-11-16T10:39:48+01:00 Lend book: slice already InProgress (claimed by loop); branch feature/lendbook; slice.json full, no comments, no backendPrompt. Built command/event/core/context via /build-state-change.
+- 2026-11-16T10:40:31+01:00 Lend book: 6 scenarios green; screen brief docs/screens/lend-book.md (mockup node 5b76ad08). Running mix precommit.
+
+## 2026-11-16 - Lend book
+
+- Slice was already InProgress (claimed by the loop), branch feature/lendbook. slice.json full; no comments, no backendPrompt.
+- Built via /build-state-change: LendBook command (loan_id + lent_at generated in Context, due_on :date), BookLent event (tags loan:, book:, member:), Core with a composite query (book-tagged BookAdded/BookLent/BookReturned OR member-tagged BookLent/BookReturned), folds open loans by loan id; rejects :book_not_found, :book_already_lent, :member_holds_two_books. Context.lend_book/1 -> {:ok, loan_id}.
+- 6 scenarios as describes; mix precommit green (30 tests); slice tests green.
+- Screen brief docs/screens/lend-book.md (mockup on board node 5b76ad08).
+- Files: lib/library/slices/lend_book/*, test/library/slices/lend_book/core_test.exs, docs/screens/lend-book.md
+- No test-analyzer skill in this kit; skipped.
+- **Learnings for future iterations:**
+  - A decision spanning two boundaries (book and member) is one DCB query: `query/1` returns a list of QueryItems (OR-ed), each scoped by its own tag; the append condition follows automatically.
+  - When folding events from two scopes, key the state by the event's own id (loan id) and filter by the command's ids in execute — apply_event doesn't see the command.
+---
