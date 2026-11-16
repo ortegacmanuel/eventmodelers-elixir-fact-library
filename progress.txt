@@ -193,3 +193,4 @@ Learnings:
   - Dates come back from FACT as ISO strings; parse with Date.from_iso8601!/1 in apply_event when the view compares them.
   - The "assumed queue" comment in send_reminder/processor.ex is now stale; it lives in another slice, so it was left alone.
 ---
+- 2026-11-16T10:45:03+01:00 Overdue loans to remind: committed d7e73c7, FF-merged to main, status Done on board and in index.json; learning recorded.

@@ -54,3 +54,4 @@
 
 ## Read slices
 - A view scoped by one tag that needs fields from events carrying only another tag (title on book:-tagged events, view by member:): fold the ids, then next_query/1 returns one QueryItem per id.
+- Date fields come back from FACT as ISO strings; a view that compares dates parses them with Date.from_iso8601!/1 in apply_event and takes the reference date (today) as the read argument, filtering in project/2 — never Date.utc_today() in Core.
