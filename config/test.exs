@@ -29,3 +29,5 @@ config :library, fact_path: "data/test/fact_db"
 # switched off here:
 #
 #     config :library, :my_automation_slice, start?: false
+
+config :library, :send_reminder, start?: false

@@ -22,6 +22,7 @@ defmodule Library.Application do
       # For slice work that must not block the caller — an automation slice's
       # external calls run as tasks under here.
       {Task.Supervisor, name: Library.TaskSupervisor},
+      {Library.Slices.SendReminder.Processor, Application.get_env(:library, :send_reminder, [])},
       LibraryWeb.Endpoint
     ]
 

@@ -41,3 +41,7 @@
 - **The section that earns its keep is "What the domain does NOT give you".** It's what stops whoever builds the view from inventing fields or asking the domain for them without cause. Write it even if the rest ends up short.
 - The **error atoms** from `Core` always go in: the screen translates them into messages and can't guess them from `slice.json`.
 - It lives in `docs/` and not `.build-kit/` on purpose: `.build-kit/` is regenerated on every fetch and the brief has to survive.
+
+## About automation slices
+- When an automation's TODO-queue slice isn't built yet, build against its assumed Context anyway (request-feedback forbids blocking on an unbuilt dependency): hold the queue module as a value in the processor state (Keyword.get(opts, :queue, Queue)) so the call stays dynamic and compile --warnings-as-errors stays green; the poll's rescue logs the UndefinedFunctionError until the queue exists.
+- An automation with no external system (just records our own fact) still runs its sweep in a Task under Library.TaskSupervisor, one sweep in flight (room_for?/1 tested under @moduletag :extra). The sweep returns :done on an empty queue so a success doesn't chain into itself.

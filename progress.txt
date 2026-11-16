@@ -2,6 +2,8 @@
 - Write slice with only idempotency: query = event type scoped by its id tag; execute returns {:ok, []} when already folded.
 - Slice folder/module naming: lib/library/slices/<snake_slice>/ (e.g. add_book), command module = slice name (AddBook.AddBook).
 - No test-analyzer skill ships in this kit (step 14 of the loop prompt): skip and note it.
+- AGENTS.md is generated: add learnings with `npx @eventmodelers/cli learn`, never by hand.
+- An automation whose queue slice isn't built: build against the queue's assumed Context, calling it dynamically (module held in the processor state).
 
 ## 2026-11-16 - Add book
 
@@ -70,4 +72,34 @@ Learnings:
 - **Learnings for future iterations:**
   - An "entity must exist" rule: query the creating event (BookAdded) by the entity tag, fold to %{added: bool}, execute rejects on false. No idempotency needed when the id is user-supplied.
   - Command with no generated fields: Context calls <Command>.new(params) (new/2 defaults generated to %{}).
+---
+
+## 2026-11-16T00:00:00Z — Task 64e3f919-8d91-4737-aed6-d228923cbd2e
+
+Slice: Correct book title (e0010c51-b315-4204-acfc-465c3b562d0d)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. Payload had sliceTitle null; the id resolves to "Correct book title" in the local index (.build-kit/.slices/lending-library/correctbooktitle/slice.json, status Done).
+- Already built and committed as 264ead0 "feat: Correct book title" (CorrectBookTitle command, BookTitleCorrected event tagged book:, Core rejects :book_not_found, Context.correct_book_title/1, 2 scenarios, screen brief docs/screens/correct-book-title.md).
+- The task was not present in .build-kit/tasks.json (already []); processed from the dispatch payload, tasks.json left as [].
+
+Learnings:
+- Nothing new; the "Done" event follows our own status update after a build and needs only a log entry.
+---
+- 2026-11-16T10:36:29+01:00 Send reminder: slice already InProgress (claimed by loop); branch feature/sendreminder; slice.json full (AUTOMATION), no comments, no backendPrompt. Queue slice 'Overdue loans to remind' not built yet (Planned): building against its assumed Context.
+
+## 2026-11-16 - Send reminder
+
+- Slice was already InProgress (claimed by the loop), branch feature/sendreminder. slice.json full (AUTOMATION); no comments, no backendPrompt, no screens (so no screen brief).
+- Write side, following /build-state-change: SendReminder command (loan_id, book_id, member_id; sent_at generated in context), ReminderSent event (tag loan:), Core reads BookReturned + ReminderSent by loan tag and rejects :already_reminded, then :loan_closed. Context.send_reminder/1.
+- Processor, following /build-automation: polls every minute, runs one sweep at a time as a Task, and calls Context.send_reminder for each item in the queue. It is in the supervision tree; config/test.exs sets start?: false.
+- The queue "Overdue loans to remind" is NOT built yet (still Planned). Assumed API: Library.Slices.OverdueLoansToRemind.Context.overdue_loans_to_remind(today :: Date) -> [%{loan_id, book_id, member_id, due_on}] (atom keys, like Catalogue). The processor logs a warning on each poll until that slice exists. Whoever builds that slice must match this signature.
+- 3 scenarios as describes plus a room_for? extra test. mix precommit green (24 tests); slice tests green (4 with --include extra).
+- No test-analyzer skill in this kit; skipped. AGENTS.md updated via `npx @eventmodelers/cli learn`, not by hand.
+- Files: lib/library/slices/send_reminder/*, test/library/slices/send_reminder/*, lib/library/application.ex, config/test.exs
+- **Learnings for future iterations:**
+  - ReminderSent tags: loan:. "Overdue loans to remind" must fold it to drop reminded loans.
+  - .build-kit/.eventmodelers/config.json is absent, but the board config lives at the repo root in .eventmodelers/config.json.
+  - AGENTS.md is generated: record learnings with `npx @eventmodelers/cli learn --topic ... --slice ...`.
 ---
