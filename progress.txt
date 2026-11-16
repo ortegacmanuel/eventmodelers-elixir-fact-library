@@ -14,3 +14,17 @@
   - BookAdded carries tag book:<id>; Catalogue / Member's loans read it as d["book_id"], d["title"], d["author"].
   - The board's HTML mockup is reachable via mcp__eventmodelers__get_node on the screen id.
 ---
+
+## 2026-11-16T00:00:00Z — Task 9b156571-caab-4b8f-9978-a25ba6c6650a
+
+Slice: Add book (b1bc3e9b-e6c1-482e-9ce8-a8ac71c55010)
+Status change: Done
+
+Action taken:
+- Logged the transition only; nothing to build. The slice was built and committed as ec6ccfb "feat: Add book" (AddBook command, BookAdded event tagged book:<id>, Core idempotent on book id, Context.add_book/1, test "A book is added to the catalogue", screen brief docs/screens/add-book.md).
+- Local slice.json already shows status Done, so the board and the repo agree.
+
+Learnings:
+- A Done event can arrive for a slice this loop has just finished; it is the echo of our own status update, so just log it.
+- .build-kit/tasks.json may not exist when a task is handed over directly in the prompt; process the given task anyway.
+---
