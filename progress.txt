@@ -103,3 +103,4 @@ Learnings:
   - .build-kit/.eventmodelers/config.json is absent, but the board config lives at the repo root in .eventmodelers/config.json.
   - AGENTS.md is generated: record learnings with `npx @eventmodelers/cli learn --topic ... --slice ...`.
 ---
+- 2026-11-16T10:38:23+01:00 Send reminder: committed 5bf4d2d, FF-merged to main, status Done on board and in index.json.
