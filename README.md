@@ -68,6 +68,12 @@ Two things from the kit's README that apply here too:
 4. The LiveViews were written from `docs/screens/`, then everything was
    checked by hand in the browser.
 
+The loop prompts in `.build-kit/lib/` are the kit's current ones, not the ones
+that built these slices. Those predated CLI 2.0 and had the agent set the
+slice's status itself, which is where the `chore: … done` commits in the
+history come from. With the current prompts the loop owns the status and each
+slice is a single `feat:` commit.
+
 Two lessons went back into the kit. The first build of *Send reminder* recorded
 the reminder and sent nothing, because the board didn't name the external
 system; now it does (`a93e19f`). And the loop built the automation before its
