@@ -41,6 +41,7 @@ npm-debug.log
 # so the scenario guard has something to check in a fresh clone.
 .build-kit/*
 !.build-kit/CLAUDE.md
+!.build-kit/LEARNED.md
 !.build-kit/AGENTS.md
 !.build-kit/.slices/
 !.build-kit/lib/

@@ -90,7 +90,7 @@ checks that the two agree.
 | `test/library/` | the kit's guards: slice isolation, scenario tests only, every TODO list exposes `pending/0`, … |
 | `docs/screens/` | the screen brief the loop wrote for each screen |
 | `.build-kit/.slices/` | the model, as fetched from the board |
-| `.build-kit/CLAUDE.md`, `.claude/skills/build-*` | the kit's blueprint and skills |
+| `.build-kit/CLAUDE.md`, `.build-kit/LEARNED.md`, `.claude/skills/build-*` | the kit's blueprint, the traps it has already paid for, and its skills |
 | `.build-kit/AGENTS.md`, `progress.txt` | what the loop learned and logged while building — kept on purpose |
 
 The CLI's own files — the root `CLAUDE.md` and the skills `connect`,
