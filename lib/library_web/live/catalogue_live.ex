@@ -5,7 +5,7 @@ defmodule LibraryWeb.CatalogueLive do
 
   @impl true
   def mount(_params, _session, socket) do
-    books = Catalogue.Context.catalogue()
+    books = Catalogue.Context.read()
 
     {:ok,
      socket

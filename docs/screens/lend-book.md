@@ -12,7 +12,7 @@ The book picker is filled from the `Catalogue` slice (the screen's `books`, `aut
 `available` fields map to `Catalogue.title` / `Catalogue.author` / `Catalogue.available`):
 
 ```elixir
-Library.Slices.Catalogue.Context.catalogue() :: [
+Library.Slices.Catalogue.Context.read() :: [
   %{book_id: String.t(), title: String.t(), author: String.t(), available: boolean()}
 ]
 ```
@@ -45,7 +45,7 @@ The form's fields:
 ## What it sends back
 
 ```elixir
-Library.Slices.LendBook.Context.lend_book(%{
+Library.Slices.LendBook.Context.execute(%{
   "book_id" => book_id,
   "member_id" => member_id,
   "due_on" => "2026-12-07"

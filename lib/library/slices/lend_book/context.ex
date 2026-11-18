@@ -3,7 +3,7 @@ defmodule Library.Slices.LendBook.Context do
 
   require Logger
 
-  def lend_book(params) do
+  def execute(params) do
     with {:ok, cmd} <-
            LendBook.new(params, %{
              loan_id: Ecto.UUID.generate(),

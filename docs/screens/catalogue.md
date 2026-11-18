@@ -7,7 +7,7 @@ Mockup: designed on the board. Open it with `mcp__eventmodelers__get_node` and t
 ## How it's entered
 
 ```elixir
-Library.Slices.Catalogue.Context.catalogue() :: [
+Library.Slices.Catalogue.Context.read() :: [
   %{book_id: String.t(), title: String.t(), author: String.t(), available: boolean()}
 ]
 ```
@@ -29,7 +29,7 @@ No field is optional: every row has all four values.
 
 ## What it sends back
 
-Nothing. This is a read-only view. The "Add a book" button in the mockup belongs to the `Add book` slice (`Library.Slices.AddBook.Context.add_book/1`).
+Nothing. This is a read-only view. The "Add a book" button in the mockup belongs to the `Add book` slice (`Library.Slices.AddBook.Context.execute/1`).
 
 ## States to render
 

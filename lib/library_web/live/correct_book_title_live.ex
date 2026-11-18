@@ -5,7 +5,7 @@ defmodule LibraryWeb.CorrectBookTitleLive do
 
   @impl true
   def mount(params, _session, socket) do
-    books = Catalogue.Context.catalogue()
+    books = Catalogue.Context.read()
 
     {:ok,
      socket
@@ -20,7 +20,7 @@ defmodule LibraryWeb.CorrectBookTitleLive do
     do: {:noreply, assign_form(socket, params, :validate)}
 
   def handle_event("save", %{"book" => params}, socket) do
-    case CorrectBookTitle.Context.correct_book_title(params) do
+    case CorrectBookTitle.Context.execute(params) do
       {:ok, _book_id} ->
         {:noreply,
          socket

@@ -84,7 +84,7 @@ defmodule LibraryWeb.<Slice>WebhookController do
   alias Library.Slices.<Slice>.Context, as: <Slice>
 
   def webhook(conn, params) do
-    case <Slice>.<verb>(params) do
+    case <Slice>.execute(params) do
       {:ok, _id} ->
         send_resp(conn, 200, "OK")
 

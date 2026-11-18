@@ -7,7 +7,7 @@ Mockup: designed on the board — `get_node` with the id above (a member id inpu
 ## How it's entered
 
 ```elixir
-Library.Slices.MemberSLoans.Context.member_s_loans(member_id :: String.t()) ::
+Library.Slices.MemberSLoans.Context.read(member_id :: String.t()) ::
   [%{loan_id: String.t(), book_id: String.t(), title: String.t() | nil, due_on: String.t()}]
 ```
 

@@ -12,7 +12,7 @@ The book picker is filled from the `Catalogue` slice (the screen's `books` and `
 fields map to `Catalogue.title` / `Catalogue.author`):
 
 ```elixir
-Library.Slices.Catalogue.Context.catalogue() :: [
+Library.Slices.Catalogue.Context.read() :: [
   %{book_id: String.t(), title: String.t(), author: String.t(), available: boolean()}
 ]
 ```
@@ -42,7 +42,7 @@ The form's fields:
 ## What it sends back
 
 ```elixir
-Library.Slices.CorrectBookTitle.Context.correct_book_title(%{"book_id" => book_id, "title" => title})
+Library.Slices.CorrectBookTitle.Context.execute(%{"book_id" => book_id, "title" => title})
 # {:ok, book_id}
 # {:error, %Ecto.Changeset{}}   # book_id or title missing/blank (validation: :required)
 # {:error, :book_not_found}     # no BookAdded for that book id

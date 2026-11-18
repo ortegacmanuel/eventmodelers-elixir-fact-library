@@ -3,7 +3,7 @@ defmodule Library.Slices.ReturnBook.Context do
 
   require Logger
 
-  def return_book(params) do
+  def execute(params) do
     with {:ok, cmd} <-
            ReturnBook.new(params, %{returned_at: DateTime.utc_now() |> DateTime.to_iso8601()}),
          {:ok, [returned]} <- write(cmd) do

@@ -14,7 +14,7 @@ defmodule LibraryWeb.MemberLoansLive do
   @impl true
   def handle_params(params, _uri, socket) do
     member_id = String.trim(params["member_id"] || "")
-    loans = if member_id == "", do: [], else: MemberSLoans.Context.member_s_loans(member_id)
+    loans = if member_id == "", do: [], else: MemberSLoans.Context.read(member_id)
 
     {:noreply,
      socket

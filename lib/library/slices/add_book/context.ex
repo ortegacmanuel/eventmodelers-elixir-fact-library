@@ -3,7 +3,7 @@ defmodule Library.Slices.AddBook.Context do
 
   require Logger
 
-  def add_book(params) do
+  def execute(params) do
     with {:ok, cmd} <- AddBook.new(params, %{book_id: Ecto.UUID.generate()}),
          {:ok, _events} <- write(cmd) do
       {:ok, cmd.book_id}

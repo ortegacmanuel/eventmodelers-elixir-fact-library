@@ -5,7 +5,7 @@ defmodule LibraryWeb.LendBookLive do
 
   @impl true
   def mount(params, _session, socket) do
-    available = Enum.filter(Catalogue.Context.catalogue(), & &1.available)
+    available = Enum.filter(Catalogue.Context.read(), & &1.available)
 
     {:ok,
      socket
@@ -20,7 +20,7 @@ defmodule LibraryWeb.LendBookLive do
     do: {:noreply, assign_form(socket, params, :validate)}
 
   def handle_event("save", %{"loan" => params}, socket) do
-    case LendBook.Context.lend_book(params) do
+    case LendBook.Context.execute(params) do
       {:ok, _loan_id} ->
         {:noreply,
          socket

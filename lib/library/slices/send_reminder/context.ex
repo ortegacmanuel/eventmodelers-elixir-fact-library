@@ -3,7 +3,7 @@ defmodule Library.Slices.SendReminder.Context do
 
   require Logger
 
-  def send_reminder(params) do
+  def execute(params) do
     with {:ok, cmd} <-
            SendReminder.new(params, %{sent_at: DateTime.utc_now() |> DateTime.truncate(:second)}),
          {:ok, _events} <- write(cmd) do

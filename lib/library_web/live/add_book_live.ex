@@ -17,7 +17,7 @@ defmodule LibraryWeb.AddBookLive do
     do: {:noreply, assign_form(socket, params, :validate)}
 
   def handle_event("save", %{"book" => params}, socket) do
-    case AddBook.Context.add_book(params) do
+    case AddBook.Context.execute(params) do
       {:ok, _book_id} ->
         {:noreply,
          socket

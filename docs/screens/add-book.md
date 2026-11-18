@@ -25,7 +25,7 @@ Nothing is read. The form's fields:
 ## What it sends back
 
 ```elixir
-Library.Slices.AddBook.Context.add_book(%{"title" => title, "author" => author})
+Library.Slices.AddBook.Context.execute(%{"title" => title, "author" => author})
 # {:ok, book_id}
 # {:error, %Ecto.Changeset{}}   # title or author missing/blank (validation: :required)
 # {:error, :store_unavailable}  # the event store isn't up

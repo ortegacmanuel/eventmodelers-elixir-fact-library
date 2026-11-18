@@ -12,7 +12,7 @@ The book picker is filled from the `Catalogue` slice (the screen's `books`, `aut
 `available` fields map to `Catalogue.title` / `Catalogue.author` / `Catalogue.available`):
 
 ```elixir
-Library.Slices.Catalogue.Context.catalogue() :: [
+Library.Slices.Catalogue.Context.read() :: [
   %{book_id: String.t(), title: String.t(), author: String.t(), available: boolean()}
 ]
 ```
@@ -43,7 +43,7 @@ The form's fields:
 ## What it sends back
 
 ```elixir
-Library.Slices.ReturnBook.Context.return_book(%{"book_id" => book_id})
+Library.Slices.ReturnBook.Context.execute(%{"book_id" => book_id})
 # {:ok, loan_id}                # the loan that was closed
 # {:error, %Ecto.Changeset{}}   # book_id missing/blank (validation: :required)
 # {:error, :book_not_lent}      # board: "A book that isn't lent can't be returned",

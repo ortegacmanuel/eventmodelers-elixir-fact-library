@@ -5,7 +5,7 @@ defmodule LibraryWeb.ReturnBookLive do
 
   @impl true
   def mount(params, _session, socket) do
-    on_loan = Enum.reject(Catalogue.Context.catalogue(), & &1.available)
+    on_loan = Enum.reject(Catalogue.Context.read(), & &1.available)
 
     {:ok,
      socket
@@ -20,7 +20,7 @@ defmodule LibraryWeb.ReturnBookLive do
     do: {:noreply, assign_form(socket, params, :validate)}
 
   def handle_event("save", %{"return" => params}, socket) do
-    case ReturnBook.Context.return_book(params) do
+    case ReturnBook.Context.execute(params) do
       {:ok, _loan_id} ->
         {:noreply,
          socket
